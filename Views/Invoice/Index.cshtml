@@ -1,0 +1,158 @@
+﻿@model IEnumerable<MVCBookingFinal_YARAB_.Models.Invoice>
+
+@{
+    ViewData["Title"] = "Index";
+    // Layout = "HotelRooms";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation.Reserved.First().Room.Hotel)
+            </th>
+             <th>
+               Room Number
+            </th>
+      
+            <th>
+                Room Type
+            </th>
+            
+            <th>
+                Meal Plan
+            </th>
+            <th>
+                Amenety
+            </th> 
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation.Reserved.SingleOrDefault().User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation.CheckInDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation.CheckOutDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FinalAmount)
+            </th>
+            <th>
+                Payment @Html.DisplayNameFor(model => model.Payment.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Payment.payment.PaymentType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Payment.PaymentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reservation.UsedPromoCodes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reservation.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reservation.Reserved.FirstOrDefault().Room.Hotel.Name)
+                </td>
+                <td>
+                    @foreach (var reservation in item.Reservation.Reserved)
+                    {
+                        @Html.DisplayFor(modelItem => reservation.Room.Id)
+                        <br />
+                    }
+                </td>
+                <td>
+                    @foreach (var reservation in item.Reservation.Reserved)
+                    {
+                        @Html.DisplayFor(modelItem => reservation.Room.roomType)
+                        <br />
+                    }
+    
+                </td>
+            <td>
+                   
+                        @Html.DisplayFor(modelItem => item.Reservation.mealPlan.plan)
+                    
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Reservation.amenity.Amenities);
+            </td>
+           
+            <td>
+
+                    UserName:@Html.DisplayFor(modelItem => item.Reservation.Reserved.SingleOrDefault().User.UserName)
+                    Mail:@Html.DisplayFor(modelItem => item.Reservation.Reserved.SingleOrDefault().User.Email)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Reservation.CheckInDate)
+            </td>  
+            <td>
+                    @Html.DisplayFor(modelItem => item.Reservation.CheckOutDate)
+            </td>
+             <td>
+                    @Html.DisplayFor(modelItem => item.TotalAmount)
+             
+            <td>
+                    @Html.DisplayFor(modelItem => item.Tax)<span>%</span>
+            </td>
+    
+            <td>
+                        @Html.DisplayFor(modelItem => item.discount)<span>%</span>
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.FinalAmount)
+                </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Payment.Id)
+             </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Payment.payment.PaymentType)
+                </td>
+             <td>
+                        @Html.DisplayFor(modelItem => item.Payment.PaymentDate)
+                </td>
+                <td>
+                    @foreach (var Pc in item.Reservation.UsedPromoCodes)
+                    {
+                        @Html.DisplayFor(modelItem => Pc.PromoCode.Code)
+                        <br />
+                        @Html.DisplayFor(modelItem => Pc.PromoCode.Discount)<span>%</span>
+                    }
+
+                </td>
+             <td>
+
+             @*    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<partial name="_modalPartial"></partial>

@@ -1,0 +1,90 @@
+﻿@model IEnumerable<MVCBookingFinal_YARAB_.Models.UsedPromoCodes>
+
+@{
+    Layout = "_Layout";
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    @using (Html.BeginForm("Index", "UsedPromoCode", FormMethod.Post))
+    { 
+    @* @Html.DropDownList("id", (SelectList)ViewBag.Codes) *@
+        <input type="text" id="codes-types" name="id" list="Codes" placeholder="Search By PromoCode" /> 
+         <datalist id="Codes"> 
+             @foreach (var code in (SelectList)ViewBag.Codes) 
+             { 
+                 <option value="@code.Value">@code.Text</option> 
+             } 
+         </datalist> 
+
+         <input type="submit" value="Search">
+    }
+    <br />
+    @using (Html.BeginForm("GetAllUsedBySameUser", "UsedPromoCode", FormMethod.Post))
+    {
+        @* @Html.DropDownList("id", (SelectList)ViewBag.Users) *@
+
+        <input type="text" id="users-types" name="userid" list="Users" placeholder="Search By User" />
+        <datalist id="Users">
+            @foreach (var code in (SelectList)ViewBag.Users)
+            {
+                <option value="@code.Value">@code.Text</option>
+            }
+        </datalist>
+
+        <input type="submit" value="Search">
+    }
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PromoCode)
+                    UsedPromoCode
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User)
+                </th>
+
+                @if (ViewBag.Showreservations)
+                {                    
+                    <th>
+                        @Html.DisplayNameFor(model => model.Reservation)
+                    </th>
+                }
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PromoCode.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.UserName)
+                    </td>
+                    @if (ViewBag.Showreservations)
+                    {                        
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Reservation.Id)
+                    </td>            
+                    }
+        </tr>
+}
+    </tbody>
+</table>
+    <p>
+       
+        @* <a asp-action="GetAllUsedBySameUser" asp-route-id="" >AllUsedBysameUser</a> | *@
+        <a asp-action="GetAllUsedinSamereserv">UsedinsameReservation</a> |
+        <a asp-action="GetAllreservUsedSamePromoCode">ReservUsedSameCode</a>
+    </p>
+</body>
+</html>

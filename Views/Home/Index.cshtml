@@ -1,0 +1,127 @@
+﻿@model  SearchViewModel
+@inject MVCBookingFinal_YARAB_.IRepositories.ICityService _cities
+@inject MVCBookingFinal_YARAB_.IRepositories.ICountryService _countries
+<style>
+    #Users-types {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    
+}
+
+</style>
+@{
+    ViewData["Title"] = "Home Page";
+    Dictionary<string, string> countriesOrCities = new();
+
+    foreach(var item in _cities.GetAll())
+    {
+        countriesOrCities[item.Name] = item.Name;
+    }
+    foreach(var item in _countries.GetAll())
+    {
+        countriesOrCities[item.Name] = item.Name;
+    }
+    SelectList sl = new SelectList(countriesOrCities, "Key", "Value");
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<form asp-action="ViewHotels" asp-controller="Reservation">
+    <div asp-validation-summary="All">
+    location: <input type="text" id="Users-types" name="CountryOrCity" list="Users" placeholder="Type to search..." />
+     <datalist id="Users"> 
+        @foreach (var user in sl) 
+        { 
+            <option value="@user.Value">@user.Text</option> 
+        } 
+     </datalist> 
+  
+     Check In Date<input type="date" asp-for="CheckInDate" style="width:120px;"/>
+ 
+     Check Out Date<input type="date" asp-for="CheckOutDate" style="width:120px;" />
+     
+     Adults Number <input type="number" asp-for="AdultsNumber" style="width:50px;" />
+     Children number <input type="number" asp-for="ChildrenNumber" style="width:50px;"/>
+     Rooms Number <input type="number" asp-for="NumberOfRooms" style="width:50px;"/>
+    <input type="submit" value="Search">
+    </div>
+</form>
+
+
+<h1> Trending Countries</h1>
+
+<div class="container row flex-wrap justify-content-center">
+@foreach (var country in _countries.GetAll().Take(5))
+{
+    if (country is not null)
+    {
+        <div class="col-3 my-1 mx-4 ">
+            <partial name="_CountryCard" model="@country"></partial>
+                </div >
+    }
+}
+</div >
+<h1> Trending Cities</h1>
+<div class ="container row flex-wrap justify-content-center">
+@foreach(var city in _cities.GetAll().Take(5))
+{
+    if (city is not null)
+    {
+        <div class="col-3 my-1 mx-4 ">
+            <partial name="_CityCard" model="@city"></partial>
+        </div>
+    }
+}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* 
+
+
+
+<form method="post" action="/Home/CreateCheckoutSession">
+    <!-- Form fields -->
+    <div>
+        <label for="name">Amount:</label>
+        <input type="text" id="amount" name="amount" value="" />
+    </div>
+
+
+    <!-- Submit button -->
+    <button type="submit">Checkout</button>
+</form> *@

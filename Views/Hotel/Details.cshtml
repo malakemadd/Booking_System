@@ -1,0 +1,153 @@
+﻿@using System.Security.Claims
+@model MVCBookingFinal_YARAB_.Models.Hotel
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <div class="row">
+        <div class="col-4">
+            <h4>Hotel</h4>
+        </div>
+        <div class="col-4">
+
+            @if (Model.Favorites.Count(f => f.User.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)) == 0)
+            {
+                <a asp-action="Favor" asp-route-hotelid="@Model.id">
+                    @* <i class="fa-solid fa-thumbs-up fa-3x"></i> *@
+                    <i class="fa-solid fa-heart fa-2x" style="color:darkgray;"></i>  
+                </a>
+            }
+            else
+            {
+                <a asp-action="UnFavor" asp-route-hotelid="@Model.id">
+
+                    <i class="fa-solid fa-heart fa-2x" style="color:red;"></i>   
+                </a>
+            }
+            <span>
+                @Model.Favorites.Count() Favorites
+            </span>
+        </div>
+ 
+    </div>
+    <div>
+    <hr />
+
+    </div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.city)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.city.Name)
+            @Html.DisplayFor(model => model.city.Country.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.starRating)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.starRating)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        @if(User.IsInRole("ADMIN"))
+        {
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Longitude)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Longitude)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Latitude)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Latitude)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ameneties)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ameneties.Id)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.isDeleted)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.isDeleted)
+        </dd>
+        <dt class="col-sm-2">
+            Images
+        </dt>
+
+        <dd class="col-sm-10">
+            @foreach (var img in Model.Images)
+            {
+                <img src="~/ProductsImages/@img.Image"
+                     data-src="@Url.Content("~/ProductsImages/" + img.Image)"
+                     class="img-thumbnail img-clickable"
+                     data-bs-toggle="modal"
+                     data-bs-target="#imageModal"
+                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
+            }
+        </dd>
+
+        
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+<h1>Rooms</h1>
+@if (Model is not null && Model.Rooms is not null)
+{
+    @foreach (var room in Model?.Rooms)
+    {
+       <partial name="RoomView" model="room"></partial>
+
+    }
+}
+<h1>Reviews</h1>
+
+<partial name="ReviewsView" model="@Model.Reviewed"></partial>
+
+
+<partial name="ReportsView" model="@Model.Reported"></partial>
+<partial name="_modalPartial"></partial>

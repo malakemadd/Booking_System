@@ -1,0 +1,21 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div>
+   
+    <h2>Check Your Inbox</h2>
+    <p>A confirmation email has been sent to your email address. Please check your inbox and click the link to confirm your email.</p>
+
+</div>
+<div>
+    <a href="https://mail.google.com/mail/u/0/#inbox">Check Your Inbox</a>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

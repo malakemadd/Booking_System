@@ -1,0 +1,44 @@
+﻿@model MVCBookingFinal_YARAB_.Models.City
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>City</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class = "col-sm-10">
+            @* @Html.DisplayFor(model => model.Image) *@
+            <img src="~/ProductsImages/@Model.Image" style="max-height:50px;max-width:50px" class="img-fluid" />
+
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Country)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Country.Name)
+        </dd>
+        @* <dt class = "col-sm-2"> *@
+        @*     @Html.DisplayNameFor(model => model.isDeleted) *@
+        @* </dt> *@
+        @* <dd class = "col-sm-10"> *@
+        @*     @Html.DisplayFor(model => model.isDeleted) *@
+        @* </dd> *@
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

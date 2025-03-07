@@ -1,0 +1,48 @@
+﻿@model MVCBookingFinal_YARAB_.Models.CardPaymentMethod
+
+@{
+    ViewData["Title"] = "CreateCard";
+}
+
+<h1>CreateCard</h1>
+
+<h4>CardPaymentMethod</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateCard">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CardNumber" class="control-label"></label>
+                <input asp-for="CardNumber" class="form-control" />
+                <span asp-validation-for="CardNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpiryDate" class="control-label"></label>
+                <input asp-for="ExpiryDate" class="form-control" />
+                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CVV" class="control-label"></label>
+                <input asp-for="CVV" class="form-control" />
+                <span asp-validation-for="CVV" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+                <label asp-for="PaymentType" class="control-label"></label>
+                <select asp-for="PaymentType" asp-items="@Html.GetEnumSelectList<PaymentType>()" value="@PaymentType.Card" class="form-control" disabled></select>
+                <span asp-validation-for="PaymentType" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

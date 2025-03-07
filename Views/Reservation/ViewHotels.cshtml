@@ -1,0 +1,133 @@
+﻿@model IEnumerable<MVCBookingFinal_YARAB_.Models.Hotel>
+
+@{
+    ViewData["Title"] = "ViewHotels";
+
+}
+
+<h1>ViewRooms</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.city.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.starRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ameneties)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Images)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var myflags = Enum.GetValues(typeof(AmenityEnum))
+            .Cast<AmenityEnum>()
+            .Where(amenity => item.Ameneties.Amenities.HasFlag(amenity))
+            .ToList();
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.city.Name)
+                    @Html.DisplayFor(modelItem => item.city.Country.Name)
+                </td>
+                <td>
+                    @for (int i = 0; i < item.starRating; i++)
+                    {
+                        <i class="filled fas fa-star" style="color:gold"></i>
+                        @* <i class="fa-solid fa-comment"></i> *@
+                    }
+                    @for (int i = item.starRating; i < 7; i++)
+                    {
+                        <i class="far fa-star"></i>
+
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @foreach (var flag in myflags)
+                    {
+                        <p> @flag </p>
+                    }
+                </td>
+                <td>
+                    @foreach (var img in @item.Images)
+                    {
+                        <img src="~/ProductsImages/@img.Image"
+                             data-src="@Url.Content("~/ProductsImages/" + img.Image)"
+                             class="img-thumbnail img-clickable"
+                             data-bs-toggle="modal"
+                             data-bs-target="#imageModal"
+                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
+                    }
+                </td>
+
+                <td>
+                    <a asp-action="GoToHotel" asp-route-id="@item.id">View Hotel Rooms</a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+@{
+    int nextpage = (ViewBag.PageNum) + 1;
+    int Previous = (ViewBag.PageNum) - 1;
+}
+<div>page number @ViewBag.PageNum </div>
+@if (ViewBag.PageNum != 0) {
+    <span> &lt; &lt;</span>
+    <a asp-action="nextPage" asp-asp-controller="Reservation" asp-route-pagenum="@Previous"> Previous page</a> 
+<span>--</span>
+}
+@if(Model.Count()==10)
+{
+    <a asp-action="nextPage" asp-asp-controller="Reservation" asp-route-pagenum="@nextpage"> next page</a>
+}
+
+<span> &gt;&gt; </span>
+
+
+<partial name="_modalPartial"></partial>

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<MVCBookingFinal_YARAB_.Models.PromoCode>
+
+@{
+    ViewData["Title"] = "Index";
+    // Layout = "HotelRooms";
+}
+
+<h1>Index</h1>
+@using (Html.BeginForm())
+{
+    @* @Html.DropDownList("id", (SelectList)ViewBag.Users) *@
+
+    <input type="text" id="Users-types" name="id" list="Users" placeholder="Type to search..." />
+     <datalist id="Users"> 
+        @foreach (var user in (SelectList)ViewBag.Users) 
+        { 
+            <option value="@user.Value">@user.Text</option> 
+        } 
+     </datalist> 
+
+    <input type="submit" value="Search">
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpiryDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddingUser)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpiryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddingUser.FirstName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

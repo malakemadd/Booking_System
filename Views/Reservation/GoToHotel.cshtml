@@ -1,0 +1,290 @@
+﻿@using System.Security.Claims
+@using MVCBookingFinal_YARAB_.ViewModels
+@using System.Text.Json
+@model IEnumerable<List<MVCBookingFinal_YARAB_.Models.Room>>
+@{
+    double max = ((IEnumerable<List<MVCBookingFinal_YARAB_.Models.Room>>)@ViewBag.AllHotels).Max(combination => combination.Sum(r => r.PricePerNight));
+    double min = ((IEnumerable<List<MVCBookingFinal_YARAB_.Models.Room>>)@ViewBag.AllHotels).Min(combination => combination.Sum(r => r.PricePerNight));
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css" rel="stylesheet">
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    }
+
+    #priceSlider {
+    margin: 20px 0;
+    width: 50%;
+    }
+
+    .value-label {
+    margin: 0 10px;
+    }
+</style>
+
+@{
+    ViewData["Title"] = "GoToHotel";
+    var PriceRangeExists = ViewBag.HasCombinations;
+    Hotel hotel=default;
+    double reviewsRating=default;
+    double count = default;
+    if (PriceRangeExists)
+    {
+        hotel = @Model.FirstOrDefault()?.FirstOrDefault()?.Hotel;
+        var query = hotel.Reviewed.Where(r => !r.isDeleted);
+        double sum = (double)query.Sum(r => r.Rating);
+         count = (double)query.Count();
+
+        if (count != 0)
+        {
+            reviewsRating = sum / count;
+        }
+        else
+        {
+            reviewsRating = 0;
+        }
+    }
+   
+    // var currentprice;
+}
+
+@if (PriceRangeExists == true)
+{
+    <h1>@hotel.Name Hotel</h1>
+
+    <header>
+
+        <div style="background-image:url('@Url.Content($"/ProductsImages/{@hotel.Images.FirstOrDefault().Image}")'); width: 100%; height: 300px; background-size: cover;background-position: center; background-repeat: no-repeat;">
+            <h4><span style="font-size:12px">@reviewsRating / 5</span>
+                @for (int i = 0; i < (int)reviewsRating;i++)
+                {
+                    <i class="fa-solid fa-star "style=" color:gold; font-size:15px;"></i>
+                    @* <i class="fa-solid  fa-star" style="color:darkgoldenrod"></i> *@
+                }
+                @if (reviewsRating % 1 >= 0.25 && reviewsRating % 1<=0.75)
+                {
+                    <i class="fa-solid fa-star-half" style="color:gold; font-size:15px;"></i>
+                }
+                else if (reviewsRating%1>0.75)
+                {
+                    <i class="fa-solid fa-star" style=" color:gold; font-size:15px;"></i>
+                }
+            </h4>
+            <p> @count Reviews</p>
+
+
+            @if (!hotel.Favorites.Any(f => f.User.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)) )
+            {
+                <a asp-action="Favor" asp-controller="Hotel" asp-route-hotelid="@hotel.id" asp-route-returntoreservation="true">
+                    @* <i class="fa-solid fa-thumbs-up fa-3x"></i> *@
+                    <i class="fa-solid fa-heart fa-2x" style="color:darkgray;"></i>
+                </a>
+            }
+            else
+            {
+                <a asp-action="UnFavor" asp-controller="Hotel" asp-route-hotelid="@hotel.id" asp-route-returntoreservation="true">
+
+                    <i class="fa-solid fa-heart fa-2x" style="color:red;"></i>
+                </a>
+            }
+            <span>
+                @hotel.Favorites.Count() Favorites
+            </span>
+
+
+        </div>
+    </header>
+    <div class="container col flex-wrap row">
+
+
+        <div class="col-4">
+
+
+
+
+
+
+            <form method="post" asp-action="GoToHotel">
+                <h2>Select Price Range</h2>
+                <div id="priceSlider"></div>
+                <div>
+                    <span class="value-label" id="minValue">0</span>
+                    <span class="value-label" id="maxValue">100000</span>
+                </div>
+                <input type="hidden" id="minPrice" name="minPrice" value="0" />
+                <input type="hidden" id="maxPrice" name="maxPrice" value="100000" />
+                <input type="hidden" name="checkfilteration" value="true" />
+                <select name="Sorting" asp-items="@Html.GetEnumSelectList(typeof(sortBy))"></select>
+                
+                <button type="submit">Submit</button>
+            </form>
+
+
+
+           
+
+
+
+        </div>
+
+        @{
+            var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                };
+        }
+        <div class="col-8">
+            @foreach (var combination in Model)
+            {
+                <div class="container row flex-wrap rounded-3" style="gap:5px; border:solid 3px black;">
+                    @foreach(var room in combination)
+                    {
+                        <div class="card rounded-3 col-lg-4"  style="width: 18rem;">
+                            <img class="card-img-top" src="~/ProductsImages/@room.Images.FirstOrDefault()?.Image" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@room.PricePerNight $</h5>
+                                <p class="card-text">@room.roomType</p>
+                                @* <a href="#" class="btn btn-primary">Go somewhere</a> *@
+                            </div>
+                        </div>
+                    }
+
+                    <p>@combination.Sum(r=>r.PricePerNight) $ per night </p>
+                    <span style="font-size:10px">please note that this is only thte rooms price excluded from other features</span>
+                    @* <input type="hidden" value="@Json.Serialize(combination)" /> *@
+                    <a class="btn btn-success" style="gap:5px;" asp-action="Reserve" asp-route-RoomsCombination="@JsonSerializer.Serialize(combination,options)"> Reserve</a>
+                </div>
+            }
+        </div>
+
+    </div>
+
+    
+}
+
+
+<script>
+    const minInput = document.getElementById("minValue");
+    const maxInput = document.getElementById("maxValue");
+    const rangeInput = document.getElementById("rangeInput");
+    const minValueText = document.getElementById("minValueText");
+    const maxValueText = document.getElementById("maxValueText");
+    const currentValueText = document.getElementById("currentValue");
+
+    minInput.addEventListener("input", () => {
+    const minValue = parseInt(minInput.value);
+    const maxValue = parseInt(maxInput.value);
+    if (minValue >= maxValue) {
+    minInput.value = maxValue - 1;
+    }
+    minValueText.textContent = minInput.value;
+    rangeInput.min = minInput.value;
+    });
+
+    maxInput.addEventListener("input", () => {
+    const minValue = parseInt(minInput.value);
+    const maxValue = parseInt(maxInput.value);
+    if (maxValue <= minValue) {
+    maxInput.value = minValue + 1;
+    }
+    maxValueText.textContent = maxInput.value;
+    rangeInput.max = maxInput.value;
+    });
+
+    rangeInput.addEventListener("input", () => {
+    currentValueText.textContent = rangeInput.value;
+    });
+</script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+
+<script>
+
+    const slider = document.getElementById('priceSlider');
+    const minValueLabel = document.getElementById('minValue');
+    const maxValueLabel = document.getElementById('maxValue');
+    const minPriceInput = document.getElementById('minPrice');
+    const maxPriceInput = document.getElementById('maxPrice');
+
+    noUiSlider.create(slider, {
+        start: [@min, @max],
+        connect: true,
+        range: {
+            'min': @min,
+            'max': @max
+        },
+        tooltips: true
+    });
+
+    slider.noUiSlider.on('update', function(values, handle) {
+        // Update the label based on the handle (left or right)
+        if (handle === 0) {
+            minValueLabel.textContent = Math.round(values[0]);
+            minPriceInput.value = Math.round(values[0]); // Update minPrice hidden input
+        } else {
+            maxValueLabel.textContent = Math.round(values[1]);
+            maxPriceInput.value = Math.round(values[1]); // Update maxPrice hidden input
+        }
+    });
+
+
+        function submitReservation(combination) {
+        // Serialize the room combination (you can use JSON or just room details)
+        let selectedRooms = combination.map(room => ({
+            RoomId: room.RoomId,
+            RoomType: room.roomType,
+            PricePerNight: room.PricePerNight
+        }));
+
+        // Find the hidden input for the selected combination and update its value
+        const hiddenInput = combination.querySelector('.selectedRooms');
+        hiddenInput.value = JSON.stringify(selectedRooms); // Serialize as JSON
+
+        // Submit the form (use JavaScript to submit the form with the serialized data)
+        const form = combination.closest('form');
+        form.submit(); // Submit the form with the selected room combination
+    }
+</script>
+@* <script>
+        async function loadPriceSlider() {
+        let response = await fetch("/api/rooms");
+        let rooms = await response.json();
+
+        let prices = rooms.map(r => r.price);
+        let minPrice = Math.min(...prices);
+        let maxPrice = Math.max(...prices);
+
+        let slider = document.getElementById("priceSlider");
+
+        noUiSlider.create(slider, {
+            start: [minPrice, maxPrice],
+            connect: true,
+            range: {
+                'min': minPrice,
+                'max': maxPrice
+            }
+        });
+
+        // Update inputs on slider change
+        slider.noUiSlider.on("update", function (values) {
+            document.getElementById("minPrice").value = Math.round(values[0]);
+            document.getElementById("maxPrice").value = Math.round(values[1]);
+        });
+
+        // Update slider when input values change
+        document.getElementById("minPrice").addEventListener("change", function () {
+            slider.noUiSlider.set([this.value, null]);
+        });
+
+        document.getElementById("maxPrice").addEventListener("change", function () {
+            slider.noUiSlider.set([null, this.value]);
+        });
+    }
+
+    // Load slider when page loads
+    document.addEventListener("DOMContentLoaded", loadPriceSlider);
+
+</script> *@
