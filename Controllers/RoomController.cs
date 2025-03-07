@@ -71,7 +71,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
 			ViewBag.HotelSelectlist = new SelectList(_hotelService.GetAll(), "id", "Name",room.HotelId);
             RoomViewModel vm = new()
             {
-                Capacity = room.Capacity,
+                //Capacity = room.Capacity,
                 Floor = room.Floor,
                 PricePerNight = room.PricePerNight,
                 roomType = room.roomType,
