@@ -14,8 +14,8 @@ namespace MVCBookingFinal_YARAB_.ViewModels
 
 		[EnumDataType(typeof(RoomType))]
 		public RoomType roomType { set; get; }
-		[Range(1, 7)]
-		public int Capacity { set; get; }
+		//[Range(1, 7)]
+		//public int Capacity { set; get; }
 		[Range(1000, 100000)]
 		[DataType(DataType.Currency)]
 		public double PricePerNight { set; get; }
