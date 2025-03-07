@@ -2,7 +2,10 @@
 @using MVCBookingFinal_YARAB_.ViewModels
 @using System.Text.Json
 @model IEnumerable<List<MVCBookingFinal_YARAB_.Models.Room>>
+@inject MVCBookingFinal_YARAB_.IRepositories.ICityService _cities
+@inject MVCBookingFinal_YARAB_.IRepositories.ICountryService _countries
 @{
+
     var hotels = ((IEnumerable<List<MVCBookingFinal_YARAB_.Models.Room>>)@ViewBag.AllHotels);
     double max = hotels.Max(combination => combination.Sum(r => r.PricePerNight));
     double min = hotels.Min(combination => combination.Sum(r => r.PricePerNight));
@@ -11,6 +14,20 @@
     //     max++;
     // }
     // Layout=null;
+    string mysrc = null;
+    Dictionary<string, string> countriesOrCities = new();
+
+    foreach (var item in _cities.GetAll())
+    {
+        countriesOrCities[item.Name] = item.Name;
+    }
+    foreach (var item in _countries.GetAll())
+    {
+        countriesOrCities[item.Name] = item.Name;
+    }
+    SelectList sl = new SelectList(countriesOrCities, "Key", "Value");
+
+
 }
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css" rel="stylesheet">
@@ -104,6 +121,26 @@
 
         </div>
     </header>
+    <form asp-action="ViewHotels" asp-controller="Reservation">
+        <div asp-validation-summary="All">
+            location: <input type="text" id="Users-types" name="CountryOrCity" list="Users" placeholder="Type to search..." />
+            <datalist id="Users">
+                @foreach (var user in sl)
+                {
+                    <option value="@user.Value">@user.Text</option>
+                }
+            </datalist>
+
+            Check In Date<input type="date" name="CheckInDate" style="width:120px;" />
+
+            Check Out Date<input type="date" name="CheckOutDate" style="width:120px;" />
+
+            Adults Number <input type="number" name="AdultsNumber" style="width:50px;" />
+            Children number <input type="number" name="ChildrenNumber" style="width:50px;" />
+            Rooms Number <input type="number" name="NumberOfRooms" style="width:50px;" />
+            <input type="submit" value="Search">
+        </div>
+    </form>
     <div class="container col flex-wrap row">
 
 
@@ -120,13 +157,13 @@
                 @if(max==min)
                 {
                     <span style="font-size:10px">All Combinations have the same price of @max</span>
-                <br />
+                    <br />
                 }
                 else{
-                <div>
-                    <span class="value-label" id="minValue">0</span>
-                    <span class="value-label" id="maxValue">100000</span>
-                </div>
+                    <div>
+                        <span class="value-label" id="minValue">0</span>
+                        <span class="value-label" id="maxValue">100000</span>
+                    </div>
                 }
                 <input type="hidden" id="minPrice" name="minPrice" value="0" />
                 <input type="hidden" id="maxPrice" name="maxPrice" value="100000" />
@@ -156,8 +193,29 @@
                 <div class="container row flex-wrap rounded-3" style="gap:5px; border:solid 3px black;">
                     @foreach (var room in combination)
                     {
+                        @if(true){
+                             mysrc = room.Images.FirstOrDefault()?.Image;
+                        }
                         <div class="card rounded-3 col-lg-4" style="width: 18rem;">
-                            <img class="card-img-top" src="~/ProductsImages/@room.Images.FirstOrDefault()?.Image" alt="Card image cap">
+                            @* <img src="~/ProductsImages/@mysrc"
+                                 alt="Card image cap"
+                                 data-src="@Url.Content($"~/ProductsImages/{mysrc}")
+                                   class="img-thumbnail img-clickable"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#imageModal"
+                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;"> *@
+
+                            @foreach (var img in room.Images)
+                            {
+                                <img src="~/ProductsImages/@img.Image"
+                                     data-src="@Url.Content("~/ProductsImages/" + img.Image)"
+                                     class="img-thumbnail img-clickable"
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#imageModal"
+                                     style=" object-fit: cover; cursor: pointer;" />
+                            }
+
+
                             <div class="card-body">
                                 <h5 class="card-title">@room.PricePerNight $</h5>
                                 <p class="card-text">@room.roomType</p>
@@ -288,7 +346,7 @@ else
     currentValueText.textContent = rangeInput.value;
     });
 </script> *@
-
+<partial name="_modalPartial"></partial>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
 
@@ -347,5 +405,6 @@ else
     document.addEventListener("DOMContentLoaded", loadPriceSlider);
 
 </script>
+
 
 

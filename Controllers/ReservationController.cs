@@ -17,6 +17,9 @@ namespace MVCBookingFinal_YARAB_.Controllers
         }
         public IActionResult ViewHotels(SearchViewModel vm,int pagenum=0)
         {
+            
+
+
             if(vm.CheckInDate>vm.CheckOutDate)
             {
                 return RedirectToAction("index", "home");
@@ -49,7 +52,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
         }
 		public IActionResult PicturePress(string countryorcity)
         {
-			
+		    
 			var hotelsquery=hotelservice.GetAllFilteredPaginated(new SearchViewModel()
             {
                 AdultsNumber=0,
