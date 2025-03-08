@@ -10,5 +10,7 @@ namespace MVCBookingFinal_YARAB_.IRepositories
         public void Create(ReservationRoomVM vm);
         //public void Update(ReservationRoomVM vm);
         public void Delete(int id);
-    }
+
+
+	}
 }
