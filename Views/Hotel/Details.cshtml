@@ -6,6 +6,25 @@
     ViewData["Title"] = "Details";
 }
 
+
+<style>
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+
+    #latitude, #longitude {
+        margin-top: 10px;
+    }
+
+    #searchBox {
+        margin-bottom: 10px;
+        width: 300px;
+        padding: 10px;
+        font-size: 16px;
+    }
+</style>
+
 <h1>Details</h1>
 
 <div>
@@ -19,24 +38,24 @@
             {
                 <a asp-action="Favor" asp-route-hotelid="@Model.id">
                     @* <i class="fa-solid fa-thumbs-up fa-3x"></i> *@
-                    <i class="fa-solid fa-heart fa-2x" style="color:darkgray;"></i>  
+                    <i class="fa-solid fa-heart fa-2x" style="color:darkgray;"></i>
                 </a>
             }
             else
             {
                 <a asp-action="UnFavor" asp-route-hotelid="@Model.id">
 
-                    <i class="fa-solid fa-heart fa-2x" style="color:red;"></i>   
+                    <i class="fa-solid fa-heart fa-2x" style="color:red;"></i>
                 </a>
             }
             <span>
                 @Model.Favorites.Count() Favorites
             </span>
         </div>
- 
+
     </div>
     <div>
-    <hr />
+        <hr />
 
     </div>
     <dl class="row">
@@ -72,33 +91,85 @@
             @Html.DisplayFor(model => model.Address)
         </dd>
 
-        @if(User.IsInRole("ADMIN"))
+        @if (User.IsInRole("ADMIN"))
         {
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
         }
-        <dt class="col-sm-2">
+
+
+
+        @* <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Longitude)
         </dt>
+
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Longitude)
         </dd>
+
+
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Latitude)
         </dt>
+
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Latitude)
-        </dd>
+        </dd> *@
+
+
+
+
+        <div class="col-12 mb-3">
+
+            <div id="map" style="width: 400px; height: 400px; cursor: pointer;"></div>
+
+        </div>
+            <script>
+                function initMap() {
+                    var lat = @Model.Latitude;
+                    var lng = @Model.Longitude;
+                    var hotelLocation = { lat: lat, lng: lng };
+
+                    
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 15,
+                        center: hotelLocation
+                    });
+
+                    
+                    var marker = new google.maps.Marker({
+                        position: hotelLocation,
+                        map: map,
+                        title: "@Model.Name"
+                    });
+
+                   
+                    map.addListener('click', function () {
+                        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+                    });
+                }
+            </script>
+
+           
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvkJ7TBXoLbCSNZ03ZOlkB6AQ-QXo8vEQ&callback=initMap"></script>
+
+
+        
+
+
+
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ameneties)
         </dt>
@@ -106,12 +177,15 @@
             @Html.DisplayFor(model => model.Ameneties.Id)
         </dd>
 
-        <dt class="col-sm-2">
+
+        @* <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.isDeleted)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.isDeleted)
-        </dd>
+        </dd> *@
+
+
         <dt class="col-sm-2">
             Images
         </dt>
@@ -128,7 +202,7 @@
             }
         </dd>
 
-        
+
     </dl>
 </div>
 <div>
@@ -140,7 +214,7 @@
 {
     @foreach (var room in Model?.Rooms)
     {
-       <partial name="RoomView" model="room"></partial>
+        <partial name="RoomView" model="room"></partial>
 
     }
 }
