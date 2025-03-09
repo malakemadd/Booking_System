@@ -344,7 +344,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
 				}
 				ModelState.AddModelError("", "Email is Invalid");
 			}
-			return View(vm);
+			return View("ForgetPassword",vm);
 		}
 
 

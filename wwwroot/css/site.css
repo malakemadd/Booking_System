@@ -47,10 +47,83 @@ body {
 .content .cardholder .imageholder .image {
     max-width: 100%;
 }
-.site-nav {
+/*.site-nav {*/
     /* position: absolute; */
     /* top: 0; */
-    background-color: #1A374D;
+    /*background-color: #1A374D;
     z-index: 9;
     width: 100%;
+}*/
+.navbar {
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+    .navbar .navbar-brand {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+.navbar-brand img {
+    height: 50px; /* Adjust if needed */
+    width: 50px; /* Adjust if needed */
+    object-fit: cover;
+}
+
+.navbar-brand span {
+    font-weight: bold;
+    color: #1A374D; /* Your provided hex color */
+}
+.inboxconfirmemail,
+.inbox {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 300px;
+    margin-top: 300px;
+}
+.inboxconfirmemail h1{
+    margin-bottom:40px;
+}
+.inbox {
+    margin-bottom:330px;
+}
+.inbox a {
+    color:white;
+    font-size:16px;
+}
+.editprofile{
+    /*justify-content:center;
+    align-items:center;*/
+/*    text-align:center;*/
+gap:20px;
+flex-direction: column;
+}
+.upperform {
+    display:flex;
+    gap:25px;
+}
+.big{
+    margin-bottom:10px;
+}
+.forgetpassword
+ {
+    margin-top:270px;
+    margin-bottom:270px;
+
+}
+.resetpassword {
+    margin-top: 200px;
+    margin-bottom: 200px;
 }
