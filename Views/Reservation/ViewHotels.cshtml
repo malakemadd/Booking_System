@@ -5,12 +5,8 @@
 
 }
 
-<h1>ViewRooms</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
+@* 
 <table class="table">
     <thead>
         <tr>
@@ -47,6 +43,9 @@
     <tbody>
         @foreach (var item in Model)
         {
+
+
+
             var myflags = Enum.GetValues(typeof(AmenityEnum))
             .Cast<AmenityEnum>()
             .Where(amenity => item.Ameneties.Amenities.HasFlag(amenity))
@@ -67,7 +66,7 @@
                     {
                         <i class="filled fas fa-star" style="color:gold"></i>
                         @* <i class="fa-solid fa-comment"></i> *@
-                    }
+@*                     }
                     @for (int i = item.starRating; i < 7; i++)
                     {
                         <i class="far fa-star"></i>
@@ -106,28 +105,171 @@
                 </td>
             </tr>
         }
-    </tbody>
-</table>
+    </tbody> *@
+@* </table> *@ 
+
+<div class="container px-5">
+
+
+    <div class="container row">
+
+
+        <h1>ViewRooms</h1>
+
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+
+        <div class="col-sm-12 col-md-2 mb-3 mb-lg-0 col-lg-3  ">
+            <div style="border: black solid 2px; height:100%">
+            </div>
+        </div>
+
+
+
+        <div class="col-sm-12 col-md-4 mb-3 mb-lg-0 col-lg-9">
+            @foreach (var item in Model)
+            {
+                var myflags = Enum.GetValues(typeof(AmenityEnum))
+                .Cast<AmenityEnum>()
+                .Where(amenity => item.Ameneties.Amenities.HasFlag(amenity))
+                .ToList();
+
+                <div class="row g-0">
+                    <div class="card mb-3" style="border-radius: 15px;">
+                        <div class="row g-0">
+
+                            <!-- Image Section -->
+                            <div class="col-md-4 p-3">
+                                <a asp-action="GoToHotel" asp-route-id="@item.id">
+                                    <img src="~/ProductsImages/644338.jpg" class="img-fluid w-100 h-100"
+                                         style="border-radius:15px; object-fit: cover;" alt="...">
+                                </a>
+                                
+                            </div>
+
+                            <!-- Card Body Section -->
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- Name, Address, Description -->
+                                        <div class="col-md-9">
+                                            <a asp-action="GoToHotel" asp-route-id="@item.id" class="text-decoration-none">
+                                                <h5 class="card-title">
+                                                @item.Name
+                                                @for (int i = 0; i < item.starRating; i++)
+                                                {
+                                                    <i class="fas fa-star" style="color: gold;"></i>
+                                                }
+                                                </h5>
+                                            </a>
+                                            <p class="card-text">@item.Address</p>
+                                            <p class="card-text"><small class="text-muted">@item.Description</small></p>
+                                        </div>
+
+                                        <!-- City Name -->
+                                        <div class="col-md-3 d-flex flex-column align-items-end">
+                                            <p class="card-text pe-2">@item.city.Name</p>
+                                            <a asp-action="GoToHotel" asp-route-id="@item.id" class="card-text pe-2  text-muted text-decoration-none d-block mb-2" >@item.Reviewed.Count reviews</a>
+                                            <a asp-action="GoToHotel" asp-route-id="@item.id" class="btn btn-primary btn-sm" style="border-radius:5px">Show Prices</a>
+                                            
+                                        </div>
+                                    </div>
+                                </div> <!-- End Card Body -->
+                            </div>
+
+                        </div> <!-- End Row -->
+                    </div> <!-- End Card -->
+                </div> <!-- End Row -->
+            }
+        </div>
 
 
 
 
-@{
-    int nextpage = (ViewBag.PageNum) + 1;
-    int Previous = (ViewBag.PageNum) - 1;
-}
-<div>page number @ViewBag.PageNum </div>
-@if (ViewBag.PageNum != 0) {
-    <span> &lt; &lt;</span>
-    <a asp-action="nextPage" asp-asp-controller="Reservation" asp-route-pagenum="@Previous"> Previous page</a> 
-<span>--</span>
-}
-@if(Model.Count()==10)
-{
-    <a asp-action="nextPage" asp-asp-controller="Reservation" asp-route-pagenum="@nextpage"> next page</a>
-}
-
-<span> &gt;&gt; </span>
 
 
-<partial name="_modalPartial"></partial>
+        @{
+            int nextpage = (ViewBag.PageNum) + 1;
+            int Previous = (ViewBag.PageNum) - 1;
+        }
+        <div>page number @ViewBag.PageNum </div>
+        @if (ViewBag.PageNum != 0)
+        {
+            <span> &lt; &lt;</span>
+            <a asp-action="nextPage" asp-asp-controller="Reservation" asp-route-pagenum="@Previous"> Previous page</a>
+            <span>--</span>
+        }
+        @if (Model.Count() == 10)
+        {
+            <a asp-action="nextPage" asp-asp-controller="Reservation" asp-route-pagenum="@nextpage"> next page</a>
+        }
+
+        <span> &gt;&gt; </span>
+
+
+        <partial name="_modalPartial"></partial>
+
+    </div>
+</div>
+
+
+@* 
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.city.Name)
+            @Html.DisplayFor(modelItem => item.city.Country.Name)
+        </td>
+        <td>
+            @for (int i = 0; i < item.starRating; i++)
+            {
+                <i class="filled fas fa-star" style="color:gold"></i>
+                @* <i class="fa-solid fa-comment"></i> *@
+@*             }
+            @for (int i = item.starRating; i < 7; i++)
+            {
+                <i class="far fa-star"></i>
+
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PhoneNumber)
+        </td>
+        <td>
+            @foreach (var flag in myflags)
+            {
+                <p> @flag </p>
+            }
+        </td>
+        <td>
+            @foreach (var img in @item.Images)
+            {
+                <img src="~/ProductsImages/@img.Image"
+                     data-src="@Url.Content("~/ProductsImages/" + img.Image)"
+                     class="img-thumbnail img-clickable"
+                     data-bs-toggle="modal"
+                     data-bs-target="#imageModal"
+                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
+            }
+        </td>
+
+        <td>
+            <a asp-action="GoToHotel" asp-route-id="@item.id">View Hotel Rooms</a>
+        </td>
+    </tr>  *@
+
+
+
+
