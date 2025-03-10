@@ -4,6 +4,20 @@ namespace MVCBookingFinal_YARAB_.Repositories
 {
 	public class InvoiceService(ApplicationDbContext _context):IInvoiceService
 	{
+		public Invoice Create(int reservationid, int paymenttid)
+		{
+
+			var invoice = new Invoice()
+			{
+				ReservationId = reservationid,
+				Tax = 10,
+				PaymentId = paymenttid
+
+			};
+			_context.Invoices.Add(invoice);
+			_context.SaveChanges();
+			return invoice;
+		}
 		public List<Invoice> GetAll()
 		{
 			return _context.Invoices

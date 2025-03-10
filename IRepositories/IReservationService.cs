@@ -7,6 +7,9 @@
 		public DraftReservation getUserReservation(string userid);
 		public PromoCode GETCODE(string text);
 		public string GETCODEText(int id);
+		public Reservation SaveReservation(ReservationViewModel vm, IEnumerable<Room> rooms, string userid);
+		public Reservation getById(int id);
+
 
 	}
 }

@@ -10,16 +10,18 @@ namespace MVCBookingFinal_YARAB_.Repositories
         {
             return context.Payments.Include(p=>p.payment).ToList();
         }
-        public void Create(PaymentMethod pm)
+        public Payment Create(PaymentMethod pm)
         {
             
             Payment payment = new Payment();
             payment.PaymentDate = DateTime.Now;
             payment.PaymentMethodId = pm.Id;
             payment.TransactionId = Guid.NewGuid().ToString();
+            payment.status = "confirmed";
             context.Payments.Add(payment);
             context.SaveChanges();
-        }
+            return payment;
+		}
 
         public void Delete(int id)
         {

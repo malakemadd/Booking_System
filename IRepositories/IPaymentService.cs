@@ -4,8 +4,8 @@
     {
         public List<Payment> GetAll();
         public Payment GetById(int Id);
-        public void Create(PaymentMethod pm);
-        public void Delete(int id);
+        public Payment Create(PaymentMethod pm);
+		public void Delete(int id);
         public List<Payment> GetByUserId(string userId);
 
 	}

@@ -18,11 +18,11 @@ namespace MVCBookingFinal_YARAB_.Models
 		public int PaymentId { get; set; }
 		public Payment Payment { get; set; }
 
-		public double TotalAmount => this.Reservation.TotalAmount   ; //use include
 
 		//[Range(0,100)]
 
 		//public double discount { get; set; }
+		public double TotalAmount => this.Reservation.TotalAmount   ; //use include
 		[NotMapped]
 		public double discount => this.Reservation.UsedPromoCodes.Where(p => this.Reservation.Reserved.First().User.Id==p.UserId).Select(p=>p.PromoCode).Sum(p => p.Discount);
 

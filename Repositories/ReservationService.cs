@@ -1,7 +1,9 @@
 ﻿
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MVCBookingFinal_YARAB_.Helpers;
 using MVCBookingFinal_YARAB_.Models;
+using System.Xml;
 
 namespace MVCBookingFinal_YARAB_.Repositories
 {
@@ -52,7 +54,67 @@ namespace MVCBookingFinal_YARAB_.Repositories
 		}
 			
 		
-	
+		public Reservation SaveReservation(ReservationViewModel vm,IEnumerable<Room> rooms,string userid)
+		{
+			Reservation reservation = new()
+			{
+				AmenityId = rooms.FirstOrDefault().Hotel.Ameneties.Id,
+				CheckInDate = (DateTime)vm.CheckInDate,
+				CheckOutDate = (DateTime)vm.CheckOutDate,
+				mealPlanId = ((int)vm.Plan) + 1,
+				reservationStatus = ReservationStatus.Pending,
+				
+			};
+			context.Reservations.Add(reservation);
+			context.SaveChanges();
+			List<ReservationRoom> myrooms = new();
+			foreach (var room in rooms) {
+				myrooms.Add( new()
+				{
+					ReservationId = reservation.Id,
+					RoomId = room.Id,
+					UserId = userid
+				});
+			}
+			context.ReservationRooms.AddRange(myrooms);
+			if (!string.IsNullOrEmpty(vm.PromoCode))
+			{
+
+				UsedPromoCodes prmo = new()
+				{
+					PromoCodeId = context.PromoCodes.FirstOrDefault(c => c.Code == vm.PromoCode).Id,
+					UserId = userid,
+					ReservationId = reservation.Id
+				};
+
+				context.UsedPromoCodes.Add(prmo);
+			}
+				context.SaveChanges();
+			context.Entry(reservation).Reference(e => e.mealPlan).Load();
+			context.Entry(reservation).Reference(e => e.amenity).Load();
+			foreach (var entry in reservation.Reserved)
+			{ 
+				context.Entry(entry).Reference(e => e.Room).Load();
+				context.Entry(entry.Room).Reference(e => e.Hotel).Load();
+
+				context.Entry(entry.Room).Collection(e => e.Images).Load();
+				
+
+			}
+
+			return reservation;
+		}
+		public Reservation getById(int id)
+		{
+			return context.Reservations
+				.Include(r=>r.UsedPromoCodes).ThenInclude(pc=>pc.PromoCode)
+				.Include(r=>r.amenity)
+				.Include(r=>r.mealPlan)
+				.Include(r=>r.Reserved).ThenInclude(r=>r.Room)
+				//.Include(r => r.Reserved).ThenInclude(r => r.Reservation)
+				.FirstOrDefault(r => r.Id == id);
+		}
+
 		public PromoCode GETCODE(string text)
 		{
 			return context.PromoCodes.FirstOrDefault(r => r.Code == text);

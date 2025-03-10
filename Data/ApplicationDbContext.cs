@@ -300,4 +300,6 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 
 public DbSet<MVCBookingFinal_YARAB_.ViewModels.RegisterViewModel> RegisterViewModel { get; set; } = default!;
 
+public DbSet<MVCBookingFinal_YARAB_.ViewModels.CardPaymentViewModel> CardPaymentViewModel { get; set; } = default!;
+
 }

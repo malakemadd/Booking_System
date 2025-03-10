@@ -194,7 +194,7 @@
                     @foreach (var room in combination)
                     {
                         @if(true){
-                             mysrc = room.Images.FirstOrDefault()?.Image;
+                            mysrc = room.Images.FirstOrDefault()?.Image;
                         }
                         <div class="card rounded-3 col-lg-4" style="width: 18rem;">
                             @* <img src="~/ProductsImages/@mysrc"
@@ -208,11 +208,11 @@
                             @foreach (var img in room.Images)
                             {
                                 <img src="~/ProductsImages/@img.Image"
-                                     data-src="@Url.Content("~/ProductsImages/" + img.Image)"
-                                     class="img-thumbnail img-clickable"
-                                     data-bs-toggle="modal"
-                                     data-bs-target="#imageModal"
-                                     style=" object-fit: cover; cursor: pointer;" />
+                                data-src="@Url.Content("~/ProductsImages/" + img.Image)"
+                                class="img-thumbnail img-clickable"
+                                data-bs-toggle="modal"
+                                data-bs-target="#imageModal"
+                                style=" object-fit: cover; cursor: pointer;" />
                             }
 
 
@@ -227,7 +227,24 @@
                     <p>@combination.Sum(r => r.PricePerNight) $ per night </p>
                     <span style="font-size:10px">please note that this is only thte rooms price excluded from other features</span>
                     @* <input type="hidden" value="@Json.Serialize(combination)" /> *@
-                    <a class="btn btn-success" style="gap:5px;" asp-action="Reserve" asp-route-RoomsCombination="@JsonSerializer.Serialize(combination,options)"> Reserve</a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-action="Reserve" method="post">
+@*                         <a class="btn btn-success" style="gap:5px;" asp-action="Reserve" asp-route-RoomsCombination="@JsonSerializer.Serialize(combination,options)"> Reserve</a>
+ *@                            <input type="hidden" name="RoomsCombination" value="@JsonSerializer.Serialize(combination,options)" />
+
+                            <button type="submit" class="btn btn-success">Reserve</button>
+                        </form>
+                        @* <a class="btn btn-success" style="gap:5px;" asp-action="Reserve" asp-route-Rooms="@combination"> Reserve</a> *@
+
+
+                    }
+                    else
+                    {
+                        <a asp-action="Login" asp-controller="Account" class="btn btn-success" style="gap:5px;">
+                                Reserve
+                            </a>
+                    }
                 </div>
             }
         </div>

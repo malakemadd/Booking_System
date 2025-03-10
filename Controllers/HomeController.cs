@@ -46,7 +46,7 @@ public class HomeController : Controller
 	{
 		var baseUrl = _httpContextAccessor.HttpContext.Request.Scheme + "://" + _httpContextAccessor.HttpContext.Request.Host;
 		var currency = "usd"; // Currency code
-		var successUrl = $"{baseUrl}/Home/Success";
+		var successUrl = $"{baseUrl}/Invoice/Create/session_id={{CHECKOUT_SESSION_ID}}";
 		var cancelUrl = $"{baseUrl}/Home/cancel";
 		StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
 
@@ -80,6 +80,9 @@ public class HomeController : Controller
 
 		var service = new SessionService();
 		var session = service.Create(options);
+		//var successUrl = $"{baseUrl}/Invoice/Create/{session.Id}";
+		options.SuccessUrl = $"{baseUrl}/Invoice/Create/{session.Id}";
+		session.SuccessUrl= $"{baseUrl}/Invoice/Create/{session.Id}"; 
 
 
 		return Redirect(session.Url);
