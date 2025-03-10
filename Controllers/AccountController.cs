@@ -49,7 +49,11 @@ namespace MVCBookingFinal_YARAB_.Controllers
 						}
 						return View(vm);
 					}
-
+					if(vm.Password==null)
+					{
+						ModelState.AddModelError("", "You have to enter a password");
+						return View(vm);
+					}
 
 
 					var user = await _userService.AddUser(vm);
@@ -344,7 +348,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
 				}
 				ModelState.AddModelError("", "Email is Invalid");
 			}
-			return View(vm);
+			return View("ForgetPassword",vm);
 		}
 
 

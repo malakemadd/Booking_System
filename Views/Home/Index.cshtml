@@ -2,14 +2,9 @@
 @inject MVCBookingFinal_YARAB_.IRepositories.ICityService _cities
 @inject MVCBookingFinal_YARAB_.IRepositories.ICountryService _countries
 @inject MVCBookingFinal_YARAB_.IRepositories.IHotelService _hotels
-<style>
-    #Users-types {
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-    }
 
-</style>
+
+
 @{
 
 
@@ -29,22 +24,32 @@
 
 }
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link href="~/css/Home.css" rel="stylesheet">
 
+    <style>
+        #Users-types {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+    </style>
 
 </head>
+
+
 
 <body>
 
 
 
 
+    <link href="~/css/Home.css" rel="stylesheet">
 
 
 
@@ -77,8 +82,6 @@
 
                                             </div>
 
-
-
                                             <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-3 calender  ">
 
                                                 <i class="fa-solid fa-calendar-days fs-5 CalenderIcon"></i>
@@ -94,10 +97,8 @@
 
 
 
-
-                                            <!-- Guests & Rooms Dropdown -->
                                             <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-3 calender dropdown">
-                                                <div class="d-flex align-items-center dropdown-toggle" id="guestsRoomsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <div class="d-flex align-items-center dropdown-toggle" id="guestsRoomsDropdown" data-toggle="dropdown" aria-expanded="false">
                                                     <i class="fa-solid fa-users CalenderIcon"></i>
                                                     <input type="text" style="background-color:transparent" class="form-control Destination" id="guestsRoomsInput" placeholder="Guests & Rooms" readonly />
                                                     @*                                                 <textarea id="guestsRoomsInput" style="background-color:transparent" class="form-control Destination" placeholder="Guests & Rooms" readonly></textarea>
@@ -126,6 +127,9 @@
                                                 </ul>
                                             </div>
 
+
+
+
                                         </div>
 
 
@@ -152,6 +156,8 @@
             </div>
         </div>
     </div>
+
+
 
 
 
@@ -203,46 +209,80 @@
     </div>
 
 
-
-
     <script>
 
-                function updateGuestsRooms() {
-            // Get the values from the inputs
-            const adults = document.getElementById('adults').value;
-            const children = document.getElementById('children').value;
-            const rooms = document.getElementById('rooms').value;
+        $(function() {
+            var slides = $('.slides'),
+            images = slides.find('img');
 
-            // Update the textarea field
-            const guestsRoomsInput = document.getElementById('guestsRoomsInput');
-            const selectedText = ${parseInt(adults) +parseInt(children)} guetst, ${rooms} Rooms;
-            guestsRoomsInput.value = selectedText;
+            images.each(function(i) {
+                $(this).attr('data-id', i + 1);
+            })
+
+            var typed = new Typed('.typed-words', {
+                strings: ["San Francisco."," Paris."," New Zealand.", " Maui.", " London."],
+                typeSpeed: 80,
+                backSpeed: 80,
+                backDelay: 4000,
+                startDelay: 1000,
+                loop: true,
+                showCursor: true,
+                preStringTyped: (arrayPos, self) => {
+                    arrayPos++;
+                    console.log(arrayPos);
+                    $('.slides img').removeClass('active');
+                    $('.slides img[data-id="'+arrayPos+'"]').addClass('active');
+                }
+
+            });
+        })
+
+        function updateGuestsRooms() {
+                // Get the values from the inputs
+                const adults = document.getElementById('adults').value;
+                const children = document.getElementById('children').value;
+                const rooms = document.getElementById('rooms').value;
 
 
-            // Close the dropdown
-            const dropdownMenu = document.querySelector('.dropdown-menu');
-            dropdownMenu.classList.remove('show');
-        }
+                // Update the textarea field
+                const guestsRoomsInput = document.getElementById('guestsRoomsInput');
+                const selectedText = `${parseInt(adults) +parseInt(children)} guetst, ${rooms} Rooms`;
+                guestsRoomsInput.value = selectedText;
 
-        // Toggle dropdown when the arrow is clicked
-        document.querySelector('.dropdown-toggle').addEventListener('click', function () {
-            const dropdownMenu = this.nextElementSibling;
-            dropdownMenu.classList.toggle('show');
-        });
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function (event) {
-            const dropdown = document.querySelector('.dropdown');
-            const dropdownMenu = dropdown.querySelector('.dropdown-menu');
-            if (!dropdown.contains(event.target)) {
+                // Update the textarea field
+                const guestsRoomsInput = document.getElementById('guestsRoomsInput');
+                const selectedText = `${parseInt(adults) +parseInt(children)} guetst, ${rooms} Rooms`;
+                guestsRoomsInput.value = selectedText;
+
+                // Close the dropdown
+                const dropdownMenu = document.querySelector('.dropdown-menu');
                 dropdownMenu.classList.remove('show');
             }
-        });
 
+            // Toggle dropdown when the arrow is clicked
+            document.querySelector('.dropdown-toggle').addEventListener('click', function () {
+                const dropdownMenu = this.nextElementSibling;
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (event) {
+                const dropdown = document.querySelector('.dropdown');
+                const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+                if (!dropdown.contains(event.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
     </script>
-
-    <script src="js/custom.js"></script>
-
 
 </body>
 </html>
+</html>
+
+
+
+
+
+
+

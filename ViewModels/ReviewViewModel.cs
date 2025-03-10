@@ -5,7 +5,7 @@ namespace MVCBookingFinal_YARAB_.ViewModels
     public class ReviewViewModel
     {
         public int? Id { get; set; }
-        [Range(1,7)]
+        [Range(1,5)]
         public int Rating { get; set; }
         
         public int HotelId { get; set; }

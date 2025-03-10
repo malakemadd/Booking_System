@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCBookingFinal_YARAB_.Data;
 using MVCBookingFinal_YARAB_.Models;
+using Stripe;
 
 namespace MVCBookingFinal_YARAB_.Controllers
 {
@@ -18,24 +20,43 @@ namespace MVCBookingFinal_YARAB_.Controllers
         // GET: Reviews
         public IActionResult Index()
         {
-            //if (User.IsInRole("Admin"))
-            //{
+            
                 var allReviews = ReviewContext.GetAllReview();
-                 return View(allReviews);
-            //}
-            //var user = _userManager.GetUserId(User);
-            //if (string.IsNullOrEmpty(user))
-            //{
-            //    return Unauthorized();
-            //}
-          
-            //var userReviews = ReviewContext.GetReviewByUser(user);
+            return View(allReviews);
 
-            //return View(userReviews);
+            //}
+            //    var user = _userManager.GetUserId(User);
+            //    if (string.IsNullOrEmpty(user))
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var userReviews = ReviewContext.GetReviewByUser(user);
+
+            //    return View(userReviews);
+
+                 return View(allReviews);
+            
         }
+        [Authorize]
+        public IActionResult MyReviews()
+        {
+            
+                var allReviews = ReviewContext.GetReviewByUser(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                 return View("Index",allReviews);
+            
+        }
+      
+     
 
         // GET: Reviews/Details/5
-
+        public IActionResult GetTopReviews()
+        {
+            var reviews = ReviewContext.GetAllReview();
+            return View("Index",reviews);
+          
+        }
+        
         public IActionResult Details(int id)
         {
             var review = ReviewContext.GetReviewById(id);
@@ -54,10 +75,13 @@ namespace MVCBookingFinal_YARAB_.Controllers
 
         // GET: Reviews/Create
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
+            //var review = ReviewContext.GetReviewById(id);
+            //var hotel = HotelContext.GetById(review.HotelId);
+            //ViewBag.Hotel = hotel.Name;
             ViewBag.Hotel = new SelectList(HotelContext.GetAll(), "id", "Name");
-           
+          
 
             return View();
         }
