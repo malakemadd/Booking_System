@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,8 +20,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
         // GET: Reviews
         public IActionResult Index()
         {
-            //if (User.IsInRole("Admin"))
-            //{
+            
                 var allReviews = ReviewContext.GetAllReview();
             return View(allReviews);
 
@@ -34,6 +34,17 @@ namespace MVCBookingFinal_YARAB_.Controllers
             //    var userReviews = ReviewContext.GetReviewByUser(user);
 
             //    return View(userReviews);
+
+                 return View(allReviews);
+            
+        }
+        [Authorize]
+        public IActionResult MyReviews()
+        {
+            
+                var allReviews = ReviewContext.GetReviewByUser(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                 return View("Index",allReviews);
+            
         }
       
      

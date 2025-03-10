@@ -11,9 +11,10 @@ namespace MVCBookingFinal_YARAB_.Data.DbConfigurations
 			
 			builder.HasData(new DraftReservation()
 			{
-				AmenityId = 1,
+				//AmenityId = 1,
+				//amenity=Amenity.,
 				Id = 1,
-				mealPlanId = 1,
+				//mealPlanId = 1,
 				CheckInDate = DateTime.Now,
 				CheckOutDate = DateTime.Now.AddDays(5),
 				UserId="1",

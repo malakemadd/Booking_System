@@ -4,6 +4,7 @@ using MVCBookingFinal_YARAB_.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCBookingFinal_YARAB_.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250307234711_yarabarta7")]
+    partial class yarabarta7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,7 +134,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7620c9eb-158f-4338-a8af-e6c52626f403",
+                            ConcurrencyStamp = "1119c45a-9a2f-4206-a38a-29608c0a0fdf",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@example.com",
@@ -265,8 +268,8 @@ namespace MVCBookingFinal_YARAB_.Migrations
                         new
                         {
                             Id = 1,
-                            CheckInDate = new DateTime(2025, 3, 8, 2, 28, 31, 443, DateTimeKind.Local).AddTicks(2125),
-                            CheckOutDate = new DateTime(2025, 3, 13, 2, 28, 31, 443, DateTimeKind.Local).AddTicks(2133),
+                            CheckInDate = new DateTime(2025, 3, 8, 1, 47, 9, 714, DateTimeKind.Local).AddTicks(1652),
+                            CheckOutDate = new DateTime(2025, 3, 13, 1, 47, 9, 714, DateTimeKind.Local).AddTicks(1668),
                             UserId = "1"
                         });
                 });
@@ -545,7 +548,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                         new
                         {
                             Id = 1,
-                            PaymentDate = new DateTime(2025, 3, 8, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(861),
+                            PaymentDate = new DateTime(2025, 3, 8, 1, 47, 9, 715, DateTimeKind.Local).AddTicks(1088),
                             PaymentMethodId = 25,
                             TransactionId = "sadiaosd",
                             status = "Confirmed"
@@ -617,7 +620,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                             AddingUserID = "1",
                             Code = "ANMMM",
                             Discount = 20.0,
-                            ExpiryDate = new DateTime(2025, 3, 13, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(2605),
+                            ExpiryDate = new DateTime(2025, 3, 13, 1, 47, 9, 715, DateTimeKind.Local).AddTicks(2790),
                             IsActive = true
                         });
                 });
@@ -662,7 +665,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                             Id = 1,
                             Complaint = "bad food",
                             HotelId = 1,
-                            ReviewDate = new DateTime(2025, 3, 8, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(4338),
+                            ReviewDate = new DateTime(2025, 3, 8, 1, 47, 9, 715, DateTimeKind.Local).AddTicks(4518),
                             UserId = "1",
                             isDeleted = false
                         });
@@ -709,8 +712,8 @@ namespace MVCBookingFinal_YARAB_.Migrations
                         {
                             Id = 1,
                             AmenityId = 1,
-                            CheckInDate = new DateTime(2025, 3, 8, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(6213),
-                            CheckOutDate = new DateTime(2025, 3, 13, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(6217),
+                            CheckInDate = new DateTime(2025, 3, 8, 1, 47, 9, 715, DateTimeKind.Local).AddTicks(6244),
+                            CheckOutDate = new DateTime(2025, 3, 13, 1, 47, 9, 715, DateTimeKind.Local).AddTicks(6248),
                             mealPlanId = 1,
                             reservationStatus = 1
                         });
@@ -804,7 +807,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                             Description = "thank you for the hotel",
                             HotelId = 1,
                             Rating = 5,
-                            ReviewDate = new DateTime(2025, 3, 8, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(9776),
+                            ReviewDate = new DateTime(2025, 3, 8, 1, 47, 9, 715, DateTimeKind.Local).AddTicks(9655),
                             UserId = "1",
                             isDeleted = false
                         });
@@ -1185,7 +1188,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
 
             modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.DraftReservation", b =>
                 {
-                    b.HasOne("MVCBookingFinal_YARAB_.Models.PromoCode", "UsedPromoCode")
+                    b.HasOne("MVCBookingFinal_YARAB_.Models.UsedPromoCodes", "UsedPromoCode")
                         .WithMany()
                         .HasForeignKey("UsedPromoCodeId")
                         .OnDelete(DeleteBehavior.NoAction);

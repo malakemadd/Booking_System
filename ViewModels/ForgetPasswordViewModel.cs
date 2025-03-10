@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVCBookingFinal_YARAB_.ViewModels
 {
@@ -6,5 +7,7 @@ namespace MVCBookingFinal_YARAB_.ViewModels
     {
         [EmailAddress(ErrorMessage ="Invalid Email format")]
         public string Email { get; set; }
+
+        
     }
 }

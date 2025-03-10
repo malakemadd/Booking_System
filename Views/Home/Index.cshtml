@@ -7,7 +7,6 @@
 
 @{
 
-
     ViewData["Title"] = "Home Page";
     Dictionary<string, string> countriesOrCities = new();
 
@@ -250,11 +249,17 @@
                 const children = document.getElementById('children').value;
                 const rooms = document.getElementById('rooms').value;
 
+
                 // Update the textarea field
                 const guestsRoomsInput = document.getElementById('guestsRoomsInput');
                 const selectedText = `${parseInt(adults) +parseInt(children)} guetst, ${rooms} Rooms`;
                 guestsRoomsInput.value = selectedText;
 
+
+                // Update the textarea field
+                const guestsRoomsInput = document.getElementById('guestsRoomsInput');
+                const selectedText = `${parseInt(adults) +parseInt(children)} guetst, ${rooms} Rooms`;
+                guestsRoomsInput.value = selectedText;
 
                 // Close the dropdown
                 const dropdownMenu = document.querySelector('.dropdown-menu');
@@ -279,3 +284,11 @@
 
 </body>
 </html>
+</html>
+
+
+
+
+
+
+

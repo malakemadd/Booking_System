@@ -60,6 +60,7 @@ namespace MVCBookingFinal_YARAB_
 			builder.Services.AddScoped<IReviewsService, ReviewsService>();
 			builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 			builder.Services.AddScoped<IUsedPromoCodeService, UsedPromoCodeService>();
+			builder.Services.AddScoped<IReservationService, ReservationService>();
 			builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 			builder.Services.AddScoped<IEmailSettings, EmailSettings>();

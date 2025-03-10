@@ -2,8 +2,8 @@
 {
 	public class RoomFilterationViewModel
 	{
-		public int minPrice { set; get; }
-		public int maxPrice { set; get; }
+		public decimal minPrice { set; get; }
+		public decimal maxPrice { set; get; }
 		//public AmenityEnum amenity { set; get; }
 		public sortBy Sorting { set; get; }
 	}
