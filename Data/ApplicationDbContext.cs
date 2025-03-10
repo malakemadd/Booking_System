@@ -33,6 +33,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 	public virtual DbSet<HotelImage> HotelsImages { set; get; }
 	public virtual DbSet<AppUser> AppUsersss { set; get; }
 	public virtual DbSet<RoomImage> RoomsImages { set; get; }
+	public virtual DbSet<DraftReservationRoom> DraftReservationRoom { set; get; }
 
 	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 		: base(options)
@@ -42,6 +43,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 	//private readonly RoleManager<IdentityRole> _roleManager;
 	 protected  override void OnModelCreating(ModelBuilder builder)
 	{
+		//builder.Entity<DraftReservationRoom>().HasKey(r => new { r.ReservedId, r.DraftReservationId });
 		foreach (var entityType in builder.Model.GetEntityTypes())
 		{
 			foreach (var foreignKey in entityType.GetForeignKeys())

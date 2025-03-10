@@ -1,9 +1,40 @@
-﻿@model MVCBookingFinal_YARAB_.Models.Reservation
+﻿@model MVCBookingFinal_YARAB_.ViewModels.ReservationViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering;
+@using Microsoft.EntityFrameworkCore
+@using System.Text.Json
 
+@inject ApplicationDbContext context;
 @{
-    ViewData["Title"] = "Reserve";
 
+    ViewData["Title"] = "Reserve";
+    var flag = false;
+    // var list= context.MealPlans.Include(m => m.plan).Select(m => new { m.Id, PlanText = m.plan.ToString() });
+    // var sl = new SelectList( ,"Id", "PlanText", Model.Plan);
+    if(Model is not null)
+    {
+        flag = true;
+
+    }
+    Hotel hotel = ViewBag.MyHotel;
+    var Amenityselectlist = Enum.GetValues(typeof(AmenityEnum))
+                   .Cast<AmenityEnum>()
+                   .Where(a => a != AmenityEnum.WiFi && hotel.Ameneties.Amenities.HasFlag(a)  )  // Optional: Filter out a specific enum value
+                   .Select(a => new SelectListItem
+                           {
+                               Value = ((int)a).ToString(),  // Enum integer value
+                               Text = a.ToString(),        // Enum string name
+                               Selected = (((AmenityEnum)Model.amenity) == null) ? false :((AmenityEnum)Model.amenity).HasFlag(a)
+                           })
+                   .ToList();
+    int x = 5;
 }
+@{
+    var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+            };
+}
+
 
 <h1>Reserve</h1>
 
@@ -14,12 +45,29 @@
         <form asp-action="Reserve">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="mealPlanId" class="control-label"></label>
-                <select asp-for="mealPlanId" class ="form-control" asp-items="ViewBag.mealPlanId"></select>
+                <label asp-for="Plan" class="control-label"></label>
+                <select asp-for="Plan" class="form-control" asp-items="@Html.GetEnumSelectList<mealPlan>()"></select>
             </div>
+            <input asp-for="rooms" hidden/>
             <div class="form-group">
-                <label asp-for="AmenityId" class="control-label"></label>
-                <select asp-for="AmenityId" class ="form-control" asp-items="ViewBag.AmenityId"></select>
+                <label asp-for="amenity" class="control-label"></label>
+                @* <select asp-for="amenity" class="form-control" asp-items="Amenityselectlist" multiple="multiple"></select> *@
+                <select name="amenity" class="form-control" multiple="multiple">
+                    @foreach (var pair in Amenityselectlist)
+                    {
+                        @if (@pair.Selected)
+                        {
+                            <option value="@pair.Value" selected>@pair.Text</option>
+
+                        }
+                        else
+                        {
+                            <option value="@pair.Value">@pair.Text</option>
+
+                        } 
+                    }
+                </select>
+                @* <select name="amenity" asp-item></select> *@
             </div>
             <div class="form-group">
                 <label asp-for="CheckInDate" class="control-label"></label>
@@ -32,12 +80,13 @@
                 <span asp-validation-for="CheckOutDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CancellationDate" class="control-label"></label>
-                <input asp-for="CancellationDate" class="form-control" />
-                <span asp-validation-for="CancellationDate" class="text-danger"></span>
+                <label asp-for="PromoCode" class="control-label"></label>
+                <input asp-for="PromoCode" class="form-control" />
+                <span asp-validation-for="PromoCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Reserve" formaction="/Reservation/Reserve" class="btn btn-primary" />
+                <input type="submit" value="Save to draft" id="saveDraftButton" formaction="/Reservation/SaveinDraft" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -50,3 +99,20 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("reservationForm");
+        const saveDraftButton = document.getElementById("saveDraftButton");
+
+        // Function to trigger "Save to draft"
+        function saveDraft() {
+            saveDraftButton.click();
+        }
+
+        // Listen for changes on all form inputs, selects, and textareas
+        form.querySelectorAll("input, select, textarea").forEach((element) => {
+            element.addEventListener("change", saveDraft); // When value changes
+            element.addEventListener("blur", saveDraft); // When user leaves field
+        });
+    });
+</script>

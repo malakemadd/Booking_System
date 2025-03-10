@@ -13,15 +13,15 @@ namespace MVCBookingFinal_YARAB_.Repositories
 			return _context.Rooms.Include(h => h.Hotel).Include(r => r.Reserved).ThenInclude(R => R.User).Include(h => h.Images).ToList();
 		}
 
-		public List<Room> GetByHotelId(int id, RoomType type = 0,int capacity=-1, int minprice = -1, int maxprice = -1, RoomStatus stat = RoomStatus.Available)
+		public List<Room> GetByHotelId(int id, RoomType type = 0, int capacity = -1, int minprice = -1, int maxprice = -1, RoomStatus stat = RoomStatus.Available)
 		{
 			return _context.Rooms.Where(u => u.roomType == type || type == RoomType.Single)
 				.Where(r => r.Status == stat || stat == RoomStatus.Available)
 				.Where(r => (r.PricePerNight >= minprice && r.PricePerNight <= maxprice)
 				|| (r.PricePerNight >= minprice && maxprice == -1)
 				|| (r.PricePerNight <= maxprice && minprice == -1)
-				|| (maxprice==-1 && minprice == -1))
-				.Where(r=>r.Capacity==capacity ||capacity==-1)
+				|| (maxprice == -1 && minprice == -1))
+				.Where(r => r.Capacity == capacity || capacity == -1)
 				.Include(h => h.Hotel)
 				.Include(r => r.Reserved)
 				.ThenInclude(R => R.User)
@@ -31,33 +31,40 @@ namespace MVCBookingFinal_YARAB_.Repositories
 
 		}
 
-		public IEnumerable<List<Room>> GetCombinationsByHotelId(int id,SearchViewModel vm)
+		public IEnumerable<List<Room>> GetCombinationsByHotelId(int id, SearchViewModel vm)
 		{
-			var peoplenum = vm.AdultsNumber==default ? 1: vm.AdultsNumber + vm.ChildrenNumber;
+			if (vm.AdultsNumber + vm.ChildrenNumber == 0)
+			{
+				vm.AdultsNumber++;
+			}
+			var peoplenum = vm.AdultsNumber + vm.ChildrenNumber;
 			var roomsnum = vm.NumberOfRooms == default ? 1 : vm.NumberOfRooms;
 			var query = _context.Rooms
 				.Include(h => h.Hotel)
-				.ThenInclude(h=>h.Reviewed)
+				.ThenInclude(h => h.Reviewed)
+
 				.Include(r => r.Reserved)
 				.ThenInclude(R => R.User)
 				.Include(h => h.Images)
-				.Include(h=>h.Hotel).ThenInclude(h=>h.Images)
-				.Include(h=>h.Hotel).ThenInclude(h=>h.Favorites).ThenInclude(f=>f.User)
-				.Include(h=>h.Hotel).ThenInclude(H=>H.Ameneties)
-				.Where(r => r.HotelId == id);
+				.Include(h => h.Hotel).ThenInclude(h => h.Images)
+				.Include(h => h.Hotel).ThenInclude(h => h.Favorites).ThenInclude(f => f.User)
+				.Include(h => h.Hotel).ThenInclude(H => H.Ameneties)
+				.Where(r => r.HotelId == id).Where(r => r.Reserved.All(res =>
+						res.Reservation.CheckOutDate <= vm.CheckInDate ||
+						res.Reservation.CheckInDate >= vm.CheckOutDate));
 
 			var combinations = GetCombinations(query.ToList(), (int)roomsnum);
 			var roomCombinations = combinations.Where(combination =>
-				{
-					var totalCapacity = combination.Sum(r => r.Capacity);
+			{
+				var totalCapacity = combination.Sum(r => r.Capacity);
 
-					return totalCapacity == peoplenum;
-				}
+				return totalCapacity == peoplenum;
+			}
 			);
 			return roomCombinations;
 
 		}
-		private IEnumerable<List<Room>> GetCombinations(List<Room> rooms, int roomsnum,int start=0,Counter counter=null)
+		public static IEnumerable<List<Room>> GetCombinations(List<Room> rooms, int roomsnum, int start = 0, Counter counter = null)
 		{
 			counter ??= new Counter();
 			if (counter.Value >= 300) yield break;
@@ -68,9 +75,9 @@ namespace MVCBookingFinal_YARAB_.Repositories
 				yield break;
 			}
 
-			for (int i = 0; i <= rooms.Count - roomsnum; i++)
+			for (int i = start; i <= rooms.Count - roomsnum; i++)
 			{
-				foreach (var combo in GetCombinations(rooms, roomsnum - 1, i + 1,counter))
+				foreach (var combo in GetCombinations(rooms, roomsnum - 1, i + 1, counter))
 				{
 					if (counter.Value >= 300) yield break;
 
@@ -81,25 +88,25 @@ namespace MVCBookingFinal_YARAB_.Repositories
 
 		public Room GetById(int id)
 		{
-			return _context.Rooms.Include(h => h.Hotel).Include(r => r.Reserved).ThenInclude(R => R.User).Include(h => h.Images).FirstOrDefault(r=>r.Id==id);
+			return _context.Rooms.Include(h => h.Hotel).Include(r => r.Reserved).ThenInclude(R => R.User).Include(h => h.Images).FirstOrDefault(r => r.Id == id);
 		}
 		public void Create(RoomViewModel vm)
 		{
 			Room room = new()
 			{
-				
-			//Capacity=vm.Capacity,
-			Floor=vm.Floor,
-			HotelId=vm.HotelId,
-			PricePerNight= vm.PricePerNight,
-			roomType=vm.roomType,
-			//Status = RoomStatus.Available,
-			
+
+				//Capacity=vm.Capacity,
+				Floor = vm.Floor,
+				HotelId = vm.HotelId,
+				PricePerNight = vm.PricePerNight,
+				roomType = vm.roomType,
+				//Status = RoomStatus.Available,
+
 
 			};
 			_context.Rooms.Add(room);
 			_context.SaveChanges();
-			room.Images = vm.Images.Select(i => new RoomImage() { Image = i.Save(env),  roomId= room.Id }).ToList();
+			room.Images = vm.Images.Select(i => new RoomImage() { Image = i.Save(env), roomId = room.Id }).ToList();
 			_context.RoomsImages.AddRange(room.Images);
 			_context.SaveChanges();
 		}
@@ -124,7 +131,7 @@ namespace MVCBookingFinal_YARAB_.Repositories
 			if (vm.Images?.Count() != 0 && vm.Images is not null)
 			{
 				room.Images = vm.Images.Select(i => new RoomImage() { Image = i.Save(env), roomId = room.Id }).ToList();
-				var deletedimages = _context.RoomsImages.Where(h => h.roomId==room.Id).ToList();
+				var deletedimages = _context.RoomsImages.Where(h => h.roomId == room.Id).ToList();
 				_context.RoomsImages.RemoveRange(deletedimages);
 				_context.RoomsImages.AddRange(room.Images);
 

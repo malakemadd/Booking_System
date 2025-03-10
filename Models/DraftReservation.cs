@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Stripe;
 
 namespace MVCBookingFinal_YARAB_.Models
 {
@@ -9,22 +10,22 @@ namespace MVCBookingFinal_YARAB_.Models
 
 		//[ForeignKey("Reserved")]
 		//public int? ReservationRoomId { set; get; }
-		public List<ReservationRoom>? Reserved { set; get; } //list instead of just one room
+		public List<DraftReservationRoom>? Reserved { set; get; } //list instead of just one room
 
-		[ForeignKey("mealPlan")]
-		public int? mealPlanId { get; set; }
-		public MealPlan? mealPlan { get; set; }
+		//[ForeignKey("mealPlan")]
+		//public int? mealPlanId { get; set; }
+		public mealPlan? mealPlan { get; set; }
 
 
-		[ForeignKey("amenity")]
-		public int? AmenityId { set; get; }
-		public Amenity? amenity { get; set; }
+		//[ForeignKey("amenity")]
+		//public int? AmenityId { set; get; }
+		public AmenityEnum? amenity { get; set; }
 		public DateTime? CheckInDate { get; set; }
 		public DateTime? CheckOutDate { get; set; }
 
 		[ForeignKey("UsedPromoCode")]
 		public int? UsedPromoCodeId { set; get; } //used promocodes
-		public UsedPromoCodes? UsedPromoCode { set; get; }
+		public PromoCode? UsedPromoCode { set; get; }
 
 		[ForeignKey("User")]
 		public string UserId { set; get; }
