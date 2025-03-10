@@ -49,7 +49,7 @@ namespace MVCBookingFinal_YARAB_.Repositories
             public List<Review> GetReviewByUser(string userId)
             {
 
-                var userReviews = context.Reviews.Include(r => r.Hotel).Where(r => r.UserId == userId && !r.isDeleted).ToList();
+                //var userReviews = context.Reviews.Include(r => r.Hotel).Where(r => r.UserId == userId && !r.isDeleted).ToList();
 
                 var userReviews = context.Reviews.Include(r => r.Hotel).Include(r=>r.User).Where(r => r.UserId == userId && !r.isDeleted).ToList();
 
