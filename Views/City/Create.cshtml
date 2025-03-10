@@ -3,16 +3,18 @@
 @{
     ViewData["Title"] = "Create";
 }
+<div class="container">
+
 
 <h1>Create</h1>
 
-<h4>CityViewModel</h4>
+
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row form col-6 createcity">
+    <div class="col-md-8">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -20,7 +22,7 @@
 
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
+                <input asp-for="Image" class="form-control p-2" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
 
@@ -29,17 +31,17 @@
             </select>
 
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group text-center "style="margin-top:25px">
+                <input type="submit" value="Create" class="btn btn-primary col-8" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
 </div>
-
+</div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

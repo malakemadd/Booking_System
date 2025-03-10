@@ -107,7 +107,8 @@ flex-direction: column;
     display:flex;
     gap:25px;
 }
-.editaccount {
+.editaccount,
+.createcity{
     margin: 0px auto 30px;
 }
 .forgetpassword {
