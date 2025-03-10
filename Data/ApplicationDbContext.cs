@@ -298,4 +298,6 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 
 public DbSet<MVCBookingFinal_YARAB_.ViewModels.RegisterViewModel> RegisterViewModel { get; set; } = default!;
 
+public DbSet<MVCBookingFinal_YARAB_.ViewModels.ReviewViewModel> ReviewViewModel { get; set; } = default!;
+
 }

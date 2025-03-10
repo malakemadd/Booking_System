@@ -48,11 +48,31 @@ namespace MVCBookingFinal_YARAB_.Repositories
 
             public List<Review> GetReviewByUser(string userId)
             {
-                var userReviews = context.Reviews.Include(r => r.Hotel).Where(r => r.UserId == userId).ToList();
+                var userReviews = context.Reviews.Include(r => r.Hotel).Where(r => r.UserId == userId && !r.isDeleted).ToList();
                 return userReviews;
             }
+        public List<Review> GetReviewByHotel(int Id)
+        {
+            var userReviews = context.Reviews.Include(r => r.Hotel).Where(r => r.HotelId == Id&& !r.isDeleted).ToList();
+            return userReviews;
+        }
 
-            public void UpdateReview(ReviewViewModel reviewVM)
+        public void GetTopReviews()
+        {
+            var reviews =  context.Reviews
+         .Include(r => r.User)
+         .OrderByDescending(r => r.Rating) 
+         .Take(5)
+         .Select(r => new ReviewViewModel2
+         {
+             UserName = r.User.UserName,
+             Rating=r.Rating,
+             Description = r.Description
+         })
+         .ToList();
+        }
+
+        public void UpdateReview(ReviewViewModel reviewVM)
             {
                 var updatedReview = context.Reviews.FirstOrDefault(r => r.Id == reviewVM.Id);
                 if (updatedReview == null)

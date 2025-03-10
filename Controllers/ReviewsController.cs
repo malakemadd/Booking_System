@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCBookingFinal_YARAB_.Data;
 using MVCBookingFinal_YARAB_.Models;
+using Stripe;
 
 namespace MVCBookingFinal_YARAB_.Controllers
 {
@@ -21,21 +22,30 @@ namespace MVCBookingFinal_YARAB_.Controllers
             //if (User.IsInRole("Admin"))
             //{
                 var allReviews = ReviewContext.GetAllReview();
-                 return View(allReviews);
-            //}
-            //var user = _userManager.GetUserId(User);
-            //if (string.IsNullOrEmpty(user))
-            //{
-            //    return Unauthorized();
-            //}
-          
-            //var userReviews = ReviewContext.GetReviewByUser(user);
+            return View(allReviews);
 
-            //return View(userReviews);
+            //}
+            //    var user = _userManager.GetUserId(User);
+            //    if (string.IsNullOrEmpty(user))
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var userReviews = ReviewContext.GetReviewByUser(user);
+
+            //    return View(userReviews);
         }
+      
+     
 
         // GET: Reviews/Details/5
-
+        public IActionResult GetTopReviews()
+        {
+            var reviews = ReviewContext.GetAllReview();
+            return View("Index",reviews);
+          
+        }
+        
         public IActionResult Details(int id)
         {
             var review = ReviewContext.GetReviewById(id);
@@ -54,10 +64,13 @@ namespace MVCBookingFinal_YARAB_.Controllers
 
         // GET: Reviews/Create
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
+            //var review = ReviewContext.GetReviewById(id);
+            //var hotel = HotelContext.GetById(review.HotelId);
+            //ViewBag.Hotel = hotel.Name;
             ViewBag.Hotel = new SelectList(HotelContext.GetAll(), "id", "Name");
-           
+          
 
             return View();
         }

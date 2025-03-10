@@ -1,49 +1,42 @@
 ﻿@model MVCBookingFinal_YARAB_.ViewModels.ReviewViewModel
 
-
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Review";
 }
 
-<h1>Create</h1>
-
-<h4>Review</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="HotelId" class="control-label">Hotel Name</label>
-                <select asp-for="HotelId" class="form-control" asp-items="ViewBag.Hotel"></select>
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header text-white text-center" style="background-color:#1A374D">
+            <h3>Create Review</h3>
+        </div>
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="mb-3">
+                            <label asp-for="HotelId" class="form-label">Hotel Name</label>
+                            <select asp-for="HotelId" class="form-control" asp-items="ViewBag.Hotel"></select>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Rating" class="form-label"></label>
+                            <input asp-for="Rating" class="form-control" />
+                            <span asp-validation-for="Rating" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary px-4">Create</button>
+                            <a asp-action="Index" class="btn btn-secondary px-4">Back to List</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-           
-
-            <div class="form-group">
-                <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
-                <span asp-validation-for="Rating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            @* <div class="form-group">
-                <label asp-for="ReviewDate" class="control-label"></label>
-                <input asp-for="ReviewDate" class="form-control" />
-                <span asp-validation-for="ReviewDate" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
