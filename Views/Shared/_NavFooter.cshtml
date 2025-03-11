@@ -1,4 +1,4 @@
-@* <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,285 +26,6 @@
 
     <!-- Libraries Stylesheet -->
     <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-    <link href="~/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="~/css/daterangepicker.css">
-    <link rel="stylesheet" href="~/css/aos.css">
-  
-
-    <link href="~/css/trendingDestinations.css" rel="stylesheet" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
- 
-    <link href="~/css/Home.css" rel="stylesheet">
-    
-
-</head>
-
-<body>
-
-    @inject UserManager<AppUser> UserManager
-    @{
-        var user = await UserManager.GetUserAsync(User);
-        var profilePicture = user?.ProfilePicture ?? "Default.jpg"; 
-    }
-
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="~/ProductsImages/air-booking-ticket-tickets-tourism-transportation-svgrepo-com.svg"
-                     alt="Logo" width="50" height="50" class="me-2">
-                <span>TRAVON</span>
-            </a>
-
-
-
-           
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Navbar Links -->
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link fs-5 fw-bold mr-5" style="color:#1A374D" href="@Url.Action("Register", "Account")">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5 fw-bold" style="color:#1A374D" href="@Url.Action("Login", "Account")">Log In</a>
-                        </li>
-                    }
-                    else
-                    {
-                     
-                        <li class="nav-item d-flex align-items-center">
-                            <img src="/ProductsImages/@profilePicture" class="rounded-circle me-2"
-                                 style="width: 40px; height: 40px; object-fit: cover; cursor: pointer;">
-                            <p class="nav-link mb-0">Hello, @User.Identity.Name</p>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("EditAccount", "Account")">Edit Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Logout", "Account")">Log Out</a>
-                        </li>
-
-                        @if (User.IsInRole("ADMIN"))
-                        {
-                            <!-- Admin-Only Tabs -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                                    Admin Panel
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
-                                    <li><a class="dropdown-item" href="@Url.Action("GiveRole", "Account")">Roles</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "City")">Cities</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Countries")">Countries</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Favorites")">Favorites</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Invoice")">Invoices</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Payment")">Payments</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "PaymentMethods")">Payment Methods</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "PromoCode")">Promo Codes</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Report")">Reports</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "ReservationRoom")">Reservations</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Reviews")">Reviews</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Room")">Rooms</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "UsedPromoCode")">Used Promo Codes</a></li>
-                                </ul>
-                            </li>
-
-
-                        }
-                    }
-                </ul>
-            </div>
-
-
-
-
-
-
-
-
-
-
-        </div>
-    </nav>
-
-
-
-
-    <div>
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
-
-
-    <div class="py-5 cta-section">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-12">
-                    <h2 class="mb-2 text-white">Lets you Explore the Best. Contact Us Now</h2>
-                    <p class="mb-4 lead text-white text-white-opacity">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, fugit?</p>
-                    <p class="mb-0"><a href="booking.html" class="btn btn-outline-white text-white btn-md font-weight-bold">Get in touch</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="site-footer">
-        <div class="inner first">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="widget">
-                            <h3 class="heading">About Tour</h3>
-                            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                        </div>
-                        <div class="widget">
-                            <ul class="list-unstyled social">
-                                <li><a href="#"><span class="icon-twitter"></span></a></li>
-                                <li><a href="#"><span class="icon-instagram"></span></a></li>
-                                <li><a href="#"><span class="icon-facebook"></span></a></li>
-                                <li><a href="#"><span class="icon-linkedin"></span></a></li>
-                                <li><a href="#"><span class="icon-dribbble"></span></a></li>
-                                <li><a href="#"><span class="icon-pinterest"></span></a></li>
-                                <li><a href="#"><span class="icon-apple"></span></a></li>
-                                <li><a href="#"><span class="icon-google"></span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-2 pl-lg-5">
-                        <div class="widget">
-                            <h3 class="heading">Pages</h3>
-                            <ul class="links list-unstyled">
-                                <li><a href="#">Blog</a></li>
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Contact</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-2">
-                        <div class="widget">
-                            <h3 class="heading">Resources</h3>
-                            <ul class="links list-unstyled">
-                                <li><a href="#">Blog</a></li>
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Contact</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="widget">
-                            <h3 class="heading">Contact</h3>
-                            <ul class="list-unstyled quick-info links">
-                                <li class="email"><a href="#">mail@example.com</a></li>
-                                <li class="phone"><a href="#">+1 222 212 3819</a></li>
-                                <li class="address"><a href="#">43 Raymouth Rd. Baltemoer, London 3910</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="inner dark">
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-md-8 mb-3 mb-md-0 mx-auto">
-                        <p>
-                            Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co" class="link-highlight">Untree.co</a> <!-- License information: https://untree.co/license/ -->Distributed By <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="overlayer"></div>
-    <div class="loader">
-        <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-
-    <script src="~/js/jquery-3.4.1.min.js"></script>
-    <script src="~/js/popper.min.js"></script>
-    <script src="~/js/owl.carousel.min.js"></script>
-    <script src="~/js/jquery.animateNumber.min.js"></script>
-    <script src="~/js/jquery.waypoints.min.js"></script>
-    <script src="~/js/jquery.fancybox.min.js"></script>
-
- 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-
-
-    <script src="~/js/moment.min.js"></script>
-    <script src="~/js/daterangepicker.js"></script>
-    <script src="~/js/typed.js"></script>
-
-
-    	<script>
-		$(function() {
-			var slides = $('.slides'),
-			images = slides.find('img');
-
-            images.each(function(i) {
-                $(this).attr('data-id', i + 1);
-            })
-
-            var typed = new Typed('.typed-words', {
-                strings: ["San Francisco."," Paris."," New Zealand.", " Maui.", " London."],
-                typeSpeed: 80,
-                backSpeed: 80,
-                backDelay: 4000,
-                startDelay: 1000,
-                loop: true,
-                showCursor: true,
-                preStringTyped: (arrayPos, self) => {
-                    arrayPos++;
-                    console.log(arrayPos);
-                    $('.slides img').removeClass('active');
-                    $('.slides img[data-id="'+arrayPos+'"]').addClass('active');
-                }
-
-			});
-		})
-	</script>
-
-
-
-    @RenderSection("Scripts", required: false)
-
-    <script src="~/js/custom.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
-
-
-
-</body>
-</html> *@
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
-    <link rel="shortcut icon" href="~/favicon.png">
-
-    <meta name="description" content="" />
-    <meta name="keywords" content="bootstrap, bootstrap4" />
 
     <link href="~/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
 
@@ -349,7 +70,6 @@
             -webkit-appearance: none;
             -moz-appearance: none;
         }
-
     </style>
 
 </head>
@@ -359,6 +79,7 @@
     @inject UserManager<AppUser> UserManager
     @{
         var user = await UserManager.GetUserAsync(User);
+
         var profilePicture = user?.ProfilePicture ?? "Default.jpg"; // Fallback image
     }
 
@@ -382,6 +103,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     @if (!User.Identity.IsAuthenticated)
+
                     {
                         <li class="nav-item">
                             <a class="nav-link fs-5 fw-bold mr-5" style="color:#1A374D" href="@Url.Action("Register", "Account")">Register</a>
@@ -390,7 +112,9 @@
                             <a class="nav-link fs-5 fw-bold" style="color:#1A374D" href="@Url.Action("Login", "Account")">Log In</a>
                         </li>
                     }
+
                     else
+
                     {
                         <!-- Authenticated User Tabs -->
                         <li class="nav-item d-flex align-items-center">
@@ -407,6 +131,7 @@
                         </li>
 
                         @if (User.IsInRole("ADMIN"))
+
                         {
                             <!-- Admin-Only Tabs -->
                             <li class="nav-item dropdown">
@@ -565,7 +290,7 @@
     <script src="~/js/typed.js"></script>
 
 
-    
+
     @RenderSection("Scripts", required: false)
 
     <script src="~/js/custom.js"></script>
@@ -594,12 +319,12 @@
             map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('searchBox'));
 
             // Bias the SearchBox results to the map's viewport
-            map.addListener('bounds_changed', function() {
+            map.addListener('bounds_changed', function () {
                 searchBox.setBounds(map.getBounds());
             });
 
             // When the user selects a place from the suggestions
-            searchBox.addListener('places_changed', function() {
+            searchBox.addListener('places_changed', function () {
                 const places = searchBox.getPlaces();
 
                 if (places.length == 0) {
@@ -624,7 +349,7 @@
             });
 
             // When the user clicks on the map, update the marker and input fields
-            google.maps.event.addListener(map, 'click', function(event) {
+            google.maps.event.addListener(map, 'click', function (event) {
                 const lat = event.latLng.lat();
                 const lng = event.latLng.lng();
 
@@ -634,7 +359,7 @@
             });
 
             // When the user drags the marker, update the input fields
-            google.maps.event.addListener(marker, 'dragend', function() {
+            google.maps.event.addListener(marker, 'dragend', function () {
                 const lat = marker.getPosition().lat();
                 const lng = marker.getPosition().lng();
                 document.getElementById('latitude').value = lat;
@@ -659,16 +384,15 @@
                 },
                 body: JSON.stringify({ latitude: lat, longitude: lng })
             })
-            .then(response => response.json())
-            .then(data => {
-                alert('Coordinates submitted successfully!');
-            })
-            .catch(error => {
-                console.error('Error submitting coordinates:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    alert('Coordinates submitted successfully!');
+                })
+                .catch(error => {
+                    console.error('Error submitting coordinates:', error);
+                });
         }
     </script>
 
 </body>
 </html>
-
