@@ -49,7 +49,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
             };
             paymentmethodservice.CreateStripe(stripepaymentmethod);
             var payment=paymentservice.Create(stripepaymentmethod);
-			int reservationid = (int)TempData["ReservationId"];
+			int reservationid = (int)TempData.Peek("ReservationId");
             var reservation=reservationservice.getById(reservationid);
             reservation.reservationStatus = ReservationStatus.Confirmed;
             var invoice=InvoiceService.Create(reservation.Id, payment.Id);
@@ -60,13 +60,14 @@ namespace MVCBookingFinal_YARAB_.Controllers
 		[HttpGet]
 		public ActionResult CreateWithCard(string amount)
 		{
+			ViewBag.Amount = amount;
 			return View();
 		}
 		[HttpPost]
 		public ActionResult CreateWithCard(CardPaymentViewModel vm)
         {
-			int reservationid = (int)TempData["ReservationId"];
-			if(!ModelState.IsValid)
+			int reservationid = (int)TempData.Peek("ReservationId");
+			if (!ModelState.IsValid)
 			{
 				TempData["ReservationId"] = reservationid;
 				return View(vm);

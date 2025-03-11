@@ -27,7 +27,8 @@ namespace MVCBookingFinal_YARAB_.Controllers
         }
         public IActionResult nextPage(int pagenum)
         {
-            SearchViewModel myvm= JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
+            SearchViewModel myvm= JsonConvert.DeserializeObject<SearchViewModel>(TempData.Peek("myviewmodel").ToString());
+			//TempData.Keep("myviewmodel");
 			ViewBag.PageNum = pagenum;
 			var hotelsquery = hotelservice.GetAllFilteredPaginated(PerPage: 10,
 				pagenum: pagenum,
@@ -36,7 +37,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
 				vm: myvm
 				);
 			
-			TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
+			//TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
 			return View("ViewHotels", hotelsquery);		
         }
 		public IActionResult PicturePress(string countryorcity)
@@ -80,8 +81,9 @@ namespace MVCBookingFinal_YARAB_.Controllers
         }
         public IActionResult FilterHotels(HotelFilterViewModel model)
         {
-			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
-			TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
+			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData.Peek("myviewmodel").ToString());
+			//TempData.Keep("myviewmodel");
+			//TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
 			ViewBag.PageNum = 0;
 			var hotelsquery = hotelservice.GetAllFilteredPaginated(PerPage: 10,
 				pagenum: 0,
@@ -89,8 +91,9 @@ namespace MVCBookingFinal_YARAB_.Controllers
 				country: myvm.CountryOrCity,
 				vm: myvm
 				).Where(h=>(h.Ameneties.Amenities&model.Amenities)==model.Amenities)
-                .OrderBy(h=> model.Sorting==HotelsortBy.StarsRating? h.starRating:
-				model.Sorting == HotelsortBy.ReviewsRating ? (h.Reviewed.Sum(r=>r.Rating)/ h.Reviewed.Count()) :
+                .OrderByDescending(h=> model.Sorting==HotelsortBy.StarsRating? h.starRating:
+				model.Sorting == HotelsortBy.ReviewsRating ? 
+                (h.Reviewed.Count() == 0 ? 0 : h.Reviewed.Sum(r => r.Rating) / h.Reviewed.Count()) :
 				h.id);
             ViewBag.Sorting = model.Sorting;
             ViewBag.Amenities = model.Amenities;
@@ -100,12 +103,13 @@ namespace MVCBookingFinal_YARAB_.Controllers
 		public IActionResult GoToHotel(int id,RoomFilterationViewModel vm=null,bool checkfilteration=false)
         {
                 
-			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
-            var result = roomService.GetCombinationsByHotelId(id, myvm);
+			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData.Peek("myviewmodel").ToString());
+			//TempData.Keep("myviewmodel");
+			var result = roomService.GetCombinationsByHotelId(id, myvm);
             ViewBag.AllHotels = result;
 			ViewBag.Hotel = result.FirstOrDefault().FirstOrDefault().Hotel;
 			//ViewBag.CanMatchAmenties = true;
-			TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
+			//TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
             if(!checkfilteration)
             {
 
@@ -165,8 +169,8 @@ namespace MVCBookingFinal_YARAB_.Controllers
 			}
             List<Room> rooms = JsonConvert.DeserializeObject<List<Room>>(RoomsCombination);
 
-            SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
-			TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
+            SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData.Peek("myviewmodel").ToString());
+			//TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
 			ViewBag.MyHotel = rooms.FirstOrDefault().Hotel;
 			//List<ReservationRoom> reservationRooms = new List<ReservationRoom>();
    //         foreach(var room in rooms)
@@ -232,14 +236,13 @@ namespace MVCBookingFinal_YARAB_.Controllers
 
             if (!ModelState.IsValid)
             {
-                TempData["FailedReserve"] = JsonSerializer.Serialize(rooms, options);
+            
 
 				return RedirectToAction("Index", "Home");
 			}
 			if (vm.CheckInDate is null || vm.CheckOutDate is null)
             {
-                ModelState.AddModelError("", "Dates has to be added");
-				TempData["FailedReserve"] = JsonSerializer.Serialize(rooms, options);
+
 				return RedirectToAction("Index", "Home");
 			}
 
@@ -249,7 +252,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
                  || room.Reserved.Any(r => r.Reservation.CheckInDate <= vm.CheckInDate && r.Reservation.CheckOutDate >= vm.CheckInDate))
                 {
 					ModelState.AddModelError("", "Room will be unavailable in those timelines");
-					TempData["FailedReserve"] = JsonSerializer.Serialize(rooms, options);
+
 					return RedirectToAction("Index","Home");
 				}
 			}

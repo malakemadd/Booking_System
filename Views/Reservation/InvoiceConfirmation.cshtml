@@ -3,18 +3,17 @@
 @{
     ViewData["Title"] = "InvoiceConfirmation";
 }
+<div class="container">
+<h1>Reservation Confirmation</h1>
 
-<h1>InvoiceConfirmation</h1>
+<div class="row form ">
 
-<div>
-    <h4>InvoiceConfirmationViewModel</h4>
-    <hr />
     <h1>@Model.Reservation.Reserved.FirstOrDefault().Room.Hotel.Name Hotel</h1>
     @foreach(var room in Model.Reservation.Reserved)
     {
-        <div class="card bg-dark text-white overflow-hidden" style="width: 100%; height: 250px; border-radius: 10px;">
+        <div class="card bg-dark text-white overflow-hidden col-6" style="height: 250px; border-radius: 10px;">
 
-            <img class="card-img img-fluid" src="~/ProductsImages/@room.Room.Images.FirstOrDefault().Image" alt="@room.Room.Hotel.Name" style="width: 100%; height: 100%; object-fit: cover;">
+            <img class="card-img img-fluid" src="~/ProductsImages/@room.Room.Images.FirstOrDefault().Image" alt="@room.Room.Hotel.Name" style="max-width: 100%; max-height: 100%;">
 
             <div class="card-img-overlay d-flex align-items-center justify-content-center">
                 <h3 class="card-title fw-bold text-center">@room.Room.PricePerNight $</h3>
@@ -22,8 +21,9 @@
 
         </div>
     }
-    <dl class="row">
-        <dt class = "col-sm-2">
+    <div class="col-8 mx-auto">
+@*     <dl class="row"> *@
+        <dt class = "col-sm-2 text-cen">
             @Html.DisplayNameFor(model => model.TotalAmount)
         </dt>
         <dd class = "col-sm-10">
@@ -47,12 +47,15 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.FinalAmount)
         </dd>
-    </dl>
-</div>
+    @* </dl> *@
 <div>
     @* @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) | *@
     <a asp-action="CreateCheckoutSession" asp-controller="Home" asp-route-amount="@Model.FinalAmount.ToString()"><img src="~/ProductsImages/stripeicon.png" style="width:50px; height:50px;" /></a>
 
 
     <a asp-action="CreateWithCard" asp-controller="Invoice" asp-route-amount="@Model.FinalAmount.ToString()"><img src="~/ProductsImages/creditcardicon.png" style="width:50px; height:50px;" /></a>
+</div>
+        </div>
+</div>
+
 </div>
