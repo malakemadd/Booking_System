@@ -16,6 +16,8 @@
 
 
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="~/css/owl.carousel.min.css">
     <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="~/css/jquery.fancybox.min.css">
@@ -29,12 +31,48 @@
 
     <link rel="stylesheet" href="~/css/daterangepicker.css">
     <link rel="stylesheet" href="~/css/aos.css">
+    <link href="~/css/Home.css" rel="stylesheet">
+    <link href="~/css/site.css" rel="stylesheet">
 
     <link href="~/css/trendingDestinations.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">   
-    <link rel="stylesheet" href="~/css/site.css">
-    <link rel="stylesheet" href="~/css/Home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="~/css/Home.css" rel="stylesheet">
+
+
+    <style>
+
+
+
+
+
+        .navbar .navbar-brand {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 50px; /* Adjust if needed */
+            width: 50px; /* Adjust if needed */
+            object-fit: cover;
+        }
+
+        .navbar-brand span {
+            font-weight: bold;
+            color: #1A374D; /* Your provided hex color */
+        }
+
+
+        #Users-types {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+    </style>
+
 </head>
 
 <body>
@@ -45,7 +83,7 @@
         var profilePicture = user?.ProfilePicture ?? "Default.jpg"; // Fallback image
     }
 
-    <nav class=" navbar  navbar-expand-lg  ">
+    <nav class=" navbar navbar-expand-lg ">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="~/ProductsImages/air-booking-ticket-tickets-tourism-transportation-svgrepo-com.svg"
@@ -98,6 +136,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
                                     <li><a class="dropdown-item" href="@Url.Action("GiveRole", "Account")">Roles</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Hotel")">Hotels</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "City")">Cities</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Countries")">Countries</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Favorites")">Favorites</a></li>
@@ -112,19 +151,37 @@
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "UsedPromoCode")">Used Promo Codes</a></li>
                                 </ul>
                             </li>
+
+
                         }
                     }
                 </ul>
             </div>
+
+
+
+
+
+
+
+
+
+
         </div>
     </nav>
+
+
+
+
     <div>
         <main role="main">
             @RenderBody()
         </main>
     </div>
-    <div class="py-5 cta-section">
-        <div class="container">
+
+
+    <div class="py-5 cta-section mt-5">
+        <div class="container mt-5">
             <div class="row text-center">
                 <div class="col-md-12">
                     <h2 class="mb-2 text-white">Lets you Explore the Best. Contact Us Now</h2>
@@ -221,6 +278,7 @@
     <script src="~/js/jquery.waypoints.min.js"></script>
     <script src="~/js/jquery.fancybox.min.js"></script>
 
+    <!--script src="~/js/aos.js"></!script-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
 
@@ -229,35 +287,6 @@
     <script src="~/js/typed.js"></script>
 
 
-    	<script>
-		$(function() {
-			var slides = $('.slides'),
-			images = slides.find('img');
-
-            images.each(function(i) {
-                $(this).attr('data-id', i + 1);
-            })
-
-            var typed = new Typed('.typed-words', {
-                strings: ["San Francisco."," Paris."," New Zealand.", " Maui.", " London."],
-                typeSpeed: 80,
-                backSpeed: 80,
-                backDelay: 4000,
-                startDelay: 1000,
-                loop: true,
-                showCursor: true,
-                preStringTyped: (arrayPos, self) => {
-                    arrayPos++;
-                    console.log(arrayPos);
-                    $('.slides img').removeClass('active');
-                    $('.slides img[data-id="'+arrayPos+'"]').addClass('active');
-                }
-
-			});
-		})
-	</script> 
-
-    
 
     @RenderSection("Scripts", required: false)
 
@@ -265,6 +294,102 @@
     <script src="~/js/bootstrap.min.js"></script>
 
 
+
+    <script>
+        let map, marker, searchBox;
+
+        function initMap() {
+            // Initial map setup
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 37.7749, lng: -122.4194 }, // Default location (San Francisco)
+                zoom: 12
+            });
+
+            marker = new google.maps.Marker({
+                map: map,
+                draggable: true,
+                position: map.getCenter()
+            });
+
+            // Search Box functionality
+            searchBox = new google.maps.places.SearchBox(document.getElementById('searchBox'));
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('searchBox'));
+
+            // Bias the SearchBox results to the map's viewport
+            map.addListener('bounds_changed', function() {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            // When the user selects a place from the suggestions
+            searchBox.addListener('places_changed', function() {
+                const places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear previous markers
+                marker.setMap(null);
+
+                // Get the details of the selected place
+                const place = places[0];
+                const lat = place.geometry.location.lat();
+                const lng = place.geometry.location.lng();
+
+                // Update the marker and the map center
+                marker.setPosition(place.geometry.location);
+                map.setCenter(place.geometry.location);
+
+                // Update the input fields with the new coordinates
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+            });
+
+            // When the user clicks on the map, update the marker and input fields
+            google.maps.event.addListener(map, 'click', function(event) {
+                const lat = event.latLng.lat();
+                const lng = event.latLng.lng();
+
+                marker.setPosition(event.latLng);
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+            });
+
+            // When the user drags the marker, update the input fields
+            google.maps.event.addListener(marker, 'dragend', function() {
+                const lat = marker.getPosition().lat();
+                const lng = marker.getPosition().lng();
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+            });
+        }
+
+        function submitCoordinates() {
+            const lat = document.getElementById('latitude').value;
+            const lng = document.getElementById('longitude').value;
+
+            if (!lat || !lng) {
+                alert('Please select a location on the map!');
+                return;
+            }
+
+            // Send the selected coordinates to your C# backend (AJAX or Fetch)
+            fetch('/api/coordinates/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ latitude: lat, longitude: lng })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Coordinates submitted successfully!');
+            })
+            .catch(error => {
+                console.error('Error submitting coordinates:', error);
+            });
+        }
+    </script>
 
 </body>
 </html>

@@ -4,13 +4,14 @@
     ViewData["Title"] = "Edit";
     List<HotelImage> TheImages = ViewBag.Images;
 }
+<div class="container">
 
-<h1>Edit</h1>
+</div>
+<h1>Edit Hotel</h1>
 
-<h4>Hotel</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row form col-8 mx-auto">
+    <div class="col-md-8">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="id" />
@@ -27,7 +28,7 @@
                          style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
                 }            
              }
-            <div class="form-group">
+            <div class="form-group text-center col-6">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
