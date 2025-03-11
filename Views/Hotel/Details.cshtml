@@ -1,5 +1,9 @@
 ﻿@using System.Security.Claims
 @model MVCBookingFinal_YARAB_.Models.Hotel
+@* @model IEnumerable<MVCBookingFinal_YARAB_.Models.Review>  *@
+
+@* @inject IEnumerable<MVCBookingFinal_YARAB_.ViewModels.ReviewViewModel2> *@
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 @{
@@ -9,30 +13,32 @@
 
 <style>
     #map {
-        height: 400px;
-        width: 100%;
+    height: 400px;
+    width: 100%;
     }
 
     #latitude, #longitude {
-        margin-top: 10px;
+    margin-top: 10px;
     }
 
     #searchBox {
-        margin-bottom: 10px;
-        width: 300px;
-        padding: 10px;
-        font-size: 16px;
+    margin-bottom: 10px;
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
     }
 </style>
+<div class="container mb-5">
+    <h1>Hotlel Details</h1>
 
-<h1>Details</h1>
+    <hr />
+    <div class="row flex-wrap form position-relative col-10 col-md-8 mx-auto justify-content-center text-center">
 
-<div>
-    <div class="row">
-        <div class="col-4">
-            <h4>Hotel</h4>
-        </div>
-        <div class="col-4">
+
+
+
+
+        <div class=" favoriteiconcontainer col-2">
 
             @if (Model.Favorites.Count(f => f.User.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)) == 0)
             {
@@ -48,137 +54,71 @@
                     <i class="fa-solid fa-heart fa-2x" style="color:red;"></i>
                 </a>
             }
-            <span>
-                @Model.Favorites.Count() Favorites
-            </span>
-        </div>
-
-    </div>
-    <div>
-        <hr />
-
-    </div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.city)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.city.Name)
-            @Html.DisplayFor(model => model.city.Country.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.starRating)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.starRating)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-
-        @if (User.IsInRole("ADMIN"))
-        {
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Email)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Email)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.PhoneNumber)
-            </dd>
-        }
-
-
-
-        @* <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Longitude)
-        </dt>
-
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Longitude)
-        </dd>
-
-
-
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Latitude)
-        </dt>
-
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Latitude)
-        </dd> *@
-
-
-
-
-        <div class="col-12 mb-3">
-
-            <div id="map" style="width: 400px; height: 400px; cursor: pointer;"></div>
 
         </div>
-            <script>
-                function initMap() {
-                    var lat = @Model.Latitude;
-                    var lng = @Model.Longitude;
-                    var hotelLocation = { lat: lat, lng: lng };
 
-                    
-                    var map = new google.maps.Map(document.getElementById('map'), {
-                        zoom: 15,
-                        center: hotelLocation
-                    });
 
-                    
-                    var marker = new google.maps.Marker({
-                        position: hotelLocation,
-                        map: map,
-                        title: "@Model.Name"
-                    });
 
-                   
-                    map.addListener('click', function () {
-                        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
-                    });
+        <div>
+
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.city)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.city.Name)
+                    @Html.DisplayFor(model => model.city.Country.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.starRating)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.starRating)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Address)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Address)
+                </dd>
+
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.PhoneNumber)
+                    </dd>
                 }
-            </script>
 
-           
-            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvkJ7TBXoLbCSNZ03ZOlkB6AQ-QXo8vEQ&callback=initMap"></script>
-
-
-        
-
-
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Ameneties)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Ameneties.Id)
+                </dd>
 
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ameneties)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Ameneties.Id)
-        </dd>
-
-
-        @* <dt class="col-sm-2">
+                @* <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.isDeleted)
         </dt>
         <dd class="col-sm-10">
@@ -186,42 +126,117 @@
         </dd> *@
 
 
-        <dt class="col-sm-2">
-            Images
-        </dt>
+                <dt class="col-sm-2">
+                    Images
+                </dt>
 
-        <dd class="col-sm-10">
-            @foreach (var img in Model.Images)
-            {
-                <img src="~/ProductsImages/@img.Image"
-                     data-src="@Url.Content("~/ProductsImages/" + img.Image)"
-                     class="img-thumbnail img-clickable"
-                     data-bs-toggle="modal"
-                     data-bs-target="#imageModal"
-                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
+                <dd class="col-sm-10">
+                    @foreach (var img in Model.Images)
+                    {
+                        <img src="~/ProductsImages/@img.Image"
+                        data-src="@Url.Content("~/ProductsImages/" + img.Image)"
+                        class="img-thumbnail img-clickable"
+                        data-bs-toggle="modal"
+                        data-bs-target="#imageModal"
+                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
+                    }
+                </dd>
+
+
+            </dl>
+            <div class="col-12 mb-3 ">
+
+                <div id="map" style=" height: 300px; align-self-center cursor: pointer;"></div>
+
+            </div>
+        </div>
+
+
+
+        <script>
+            function initMap() {
+            var lat = @Model.Latitude;
+            var lng = @Model.Longitude;
+            var hotelLocation = { lat: lat, lng: lng };
+
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: hotelLocation
+            });
+
+
+            var marker = new google.maps.Marker({
+            position: hotelLocation,
+            map: map,
+            title: "@Model.Name"
+            });
+
+
+            map.addListener('click', function () {
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+            });
             }
-        </dd>
+        </script>
 
 
-    </dl>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvkJ7TBXoLbCSNZ03ZOlkB6AQ-QXo8vEQ&callback=initMap"></script>
+
+
+
+
+
+
+
+
+        <div class=" row justify-content-between">
+            <a asp-action="Index" class="btn btn-primary col-5">Back to List</a>
+            @if (User.IsInRole("ADMIN"))
+            {                
+                <a asp-action="Edit" asp-route-id="@Model?.id" class="col-4 btn btn-primary">Edit</a>
+            }
+
+        </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>
+
+<div class="container my-5">
+
 <h1>Rooms</h1>
+<hr />
 @if (Model is not null && Model.Rooms is not null)
 {
+    <div class="row flex-wrap " style="gap:10px;">
+
     @foreach (var room in Model?.Rooms)
     {
         <partial name="RoomView" model="room"></partial>
 
     }
+    </div>
 }
+</div>
+
+
+
+<div class="container">
 <h1>Reviews</h1>
 
-<partial name="ReviewsView" model="@Model.Reviewed"></partial>
+@* <partial name="ReviewsView" model="@Model.Reviewed"></partial> *@
+@* <partial name="_GetReview" model="@Model.Reviewed"></partial> *@
+<div>
 
+@await Html.PartialAsync("_GetReview", Model.Reviewed.Select(r => new ReviewViewModel2
+{
+    Id = r.Id,
+    HotelId = r.HotelId,
+    UserName = r.User.UserName,
+    Rating = r.Rating,
+    Description = r.Description
+
+}))
+</div>
+</div>
 
 <partial name="ReportsView" model="@Model.Reported"></partial>
 <partial name="_modalPartial"></partial>

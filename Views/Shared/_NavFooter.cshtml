@@ -43,12 +43,7 @@
     <style>
 
 
-        /*    .navbar {
-                            background-color: transparent !important;
-                            position: absolute;
-                            width: 100%;
-                            z-index: 10;
-                        } */
+
 
 
         .navbar .navbar-brand {
@@ -58,25 +53,31 @@
             align-items: center;
         }
 
-        .navbar-brand img {
-            height: 50px; /* Adjust if needed */
-            width: 50px; /* Adjust if needed */
-            object-fit: cover;
-        }
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="~/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="~/fonts/flaticon/font/flaticon.css">
 
-        .navbar-brand span {
-            font-weight: bold;
-            color: #1A374D; /* Your provided hex color */
+
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+            top: 0;
+            left: 0;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
 
         #Users-types {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
+    @RenderSection("Styles", required: false)
         }
     </style>
-    @RenderSection("Styles", required: false)
+    <link href="~/css/Home.css" rel="stylesheet">
+    
+
 </head>
 
 <body>
@@ -88,7 +89,7 @@
         var profilePicture = user?.ProfilePicture ?? "Default.jpg"; // Fallback image
     }
 
-    <nav class=" navbar @* navbar-expand-lg *@ ">
+    <nav class=" navbar navbar-expand-lg ">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="~/ProductsImages/air-booking-ticket-tickets-tourism-transportation-svgrepo-com.svg"
@@ -145,6 +146,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
                                     <li><a class="dropdown-item" href="@Url.Action("GiveRole", "Account")">Roles</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Hotel")">Hotels</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "City")">Cities</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Countries")">Countries</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Favorites")">Favorites</a></li>
@@ -286,7 +288,7 @@
     <script src="~/js/jquery.waypoints.min.js"></script>
     <script src="~/js/jquery.fancybox.min.js"></script>
 
-    @* <script src="~/js/aos.js"></script> *@
+    <!--script src="~/js/aos.js"></!script-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
 
@@ -358,9 +360,10 @@
                 const lat = event.latLng.lat();
                 const lng = event.latLng.lng();
 
-    @* 
-	<script src="~/js/jquery-3.4.1.min.js"></script>
-	<script src="~/js/bootstrap.min.js"></script> *@
+                marker.setPosition(event.latLng);
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+            });
 
             // When the user drags the marker, update the input fields
             google.maps.event.addListener(marker, 'dragend', function () {
@@ -371,9 +374,14 @@
             });
         }
 
-    <script src="~/js/custom.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
+        function submitCoordinates() {
+            const lat = document.getElementById('latitude').value;
+            const lng = document.getElementById('longitude').value;
 
+            if (!lat || !lng) {
+                alert('Please select a location on the map!');
+                return;
+            }
 
             // Send the selected coordinates to your C# backend (AJAX or Fetch)
             fetch('/api/coordinates/submit', {

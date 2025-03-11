@@ -3,11 +3,13 @@
 @{
     ViewData["Title"] = "Details";
 }
+<div class="container">
 
-<h1>Details</h1>
 
-<div>
-    <h4>ReservationRoom</h4>
+<h1 class="text-center">Details</h1>
+
+<div class="row form col-7 text-center mx-auto mb-5">
+    
     <hr />
     <dl class="row">
 
@@ -53,8 +55,9 @@
 
 
     </dl>
-</div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.id" class="btn btn-primary ">Edit</a> 
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>
+</div>
 </div>

@@ -62,16 +62,17 @@
                     
                  </div>
             </div>
-                <div class="form-group">
+                <div class="form-group text-center">
                     <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" class="form-control" />
+                    <input asp-for="Email" class="form-control col-8 mx-auto" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group ">
-                    <input type="file" asp-for="ProfilePicture" class="m-5" />
+                    <input type="file" asp-for="ProfilePicture" class="form-control col-8 mx-auto" />
+
                 </div>
             <div class="form-group text-center ">
-                <input type="submit" value="Create" class="btn btn-primary col-12" />
+                <input type="submit" value="Create" class="btn btn-primary col-8 " />
             </div>
         </form>
 <div class="linkcontainer">
@@ -80,7 +81,7 @@
         <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="Facebook"><i class="fa-brands fa-facebook-f googleicon btn btn-primary"></i></a>
     </div>
 
-    <div class="text-end">
+    <div class="text-center my-3">
     <a asp-action="Login">Already have an account? Login Now!</a>
         
     </div>

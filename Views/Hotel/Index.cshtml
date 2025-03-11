@@ -6,12 +6,12 @@
 }
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-<h1>Index</h1>
+<h1>Hotels</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
-<table class="table">
+<table class="table table-bordered table-hover " style="width:fit-content;">
     <thead>
         <tr>
             <th>
@@ -20,9 +20,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.city.Name)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.starRating)
             </th>
@@ -38,9 +38,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Ameneties)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Images)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -57,10 +57,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
-                <td>
+                @* <td>
                     @Html.DisplayFor(modelItem => item.city.Name)
                     @Html.DisplayFor(modelItem => item.city.Country.Name)
-                </td>
+                </td> *@
                 <td>
                     @for(int i=0;i<item.starRating;i++)
                     {
@@ -88,7 +88,7 @@
                         <p> @flag </p>
                     }
                 </td>
-                <td>
+                @* <td>
                     @foreach (var img in @item.Images)
                     {
                         <img src="~/ProductsImages/@img.Image"
@@ -98,12 +98,12 @@
                              data-bs-target="#imageModal"
                              style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
                     }
-                </td>
+                </td> *@
             
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.id" class="btn-sm btn-primary d-inline-block" style="text-decoration:none;">Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.id" class="btn-sm btn-success d-inline-block" style="text-decoration:none;">Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.id" class="btn-sm btn-danger d-inline-block" style="text-decoration:none;">Delete</a>
             </td>
         </tr>
 }
