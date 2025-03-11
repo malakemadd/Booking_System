@@ -170,23 +170,12 @@ namespace MVCBookingFinal_YARAB_.Controllers
             List<Room> rooms = JsonConvert.DeserializeObject<List<Room>>(RoomsCombination);
 
             SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData.Peek("myviewmodel").ToString());
-			//TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
-			ViewBag.MyHotel = rooms.FirstOrDefault().Hotel;
-			//List<ReservationRoom> reservationRooms = new List<ReservationRoom>();
-   //         foreach(var room in rooms)
-   //         {
-   //             reservationRooms.Add(new()
-   //             {
-   //                 RoomId = room.Id,
-   //                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-   //                 IsDeleted = true
-   //             });
-   //         }
-            //var user = await usermanager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+			ViewBag.MyHotel = rooms.FirstOrDefault().Hotel;	
 
             DraftReservation draft = new()
             {
-                //Reserved = rooms
+
             };
 			
             if(myvm.CheckInDate!=default)
@@ -222,6 +211,49 @@ namespace MVCBookingFinal_YARAB_.Controllers
 			
 			return View(vm);
         }
+		[HttpGet]
+        [Authorize]
+		public async Task<ActionResult> ViewMyDraft()
+		{
+            //var user=await usermanager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var draft=reservationservice.getUserReservation(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            ReservationViewModel model = new();
+
+			if (draft is not null)
+            {
+                var hotel= draft.Reserved.FirstOrDefault().Reserved.Hotel; ;
+				ViewBag.MyHotel = hotel;
+                
+					var options = new JsonSerializerOptions
+					{
+						ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+					};
+
+                
+				model.rooms = JsonSerializer.Serialize(draft.Reserved.Select(r => r.Reserved), options);
+				model.CheckInDate = draft.CheckInDate;
+                model.CheckOutDate = draft.CheckOutDate;
+                model.amenity = draft.amenity == null ? 0 : draft.amenity;
+                model.Plan = draft.mealPlan == null ? 0 : draft.mealPlan;
+                string text;
+                if (draft.UsedPromoCodeId != null)
+                {
+                     text = reservationservice.GETCODEText((int)draft.UsedPromoCodeId);
+				}
+                else
+                {
+                    text = "";
+
+				}
+                    model.PromoCode = text == "" ? "" : text;
+			}
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+                
+            return View("Reserve", model);
+		}
 
         [HttpPost]
         [Authorize]
@@ -306,49 +338,6 @@ namespace MVCBookingFinal_YARAB_.Controllers
             draft.UsedPromoCodeId = reservationservice.GETCODE(vm.PromoCode)?.Id;
 			await reservationservice.savedraft(draft, User.FindFirstValue(ClaimTypes.NameIdentifier), rooms);
 			return View("Reserve",vm);
-		}
-		[HttpGet]
-        [Authorize]
-		public async Task<ActionResult> ViewMyDraft()
-		{
-            //var user=await usermanager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var draft=reservationservice.getUserReservation(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            ReservationViewModel model = new();
-
-			if (draft is not null)
-            {
-                var hotel= draft.Reserved.FirstOrDefault().Reserved.Hotel; ;
-				ViewBag.MyHotel = hotel;
-                
-					var options = new JsonSerializerOptions
-					{
-						ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
-					};
-
-                
-				model.rooms = JsonSerializer.Serialize(draft.Reserved.Select(r => r.Reserved), options);
-				model.CheckInDate = draft.CheckInDate;
-                model.CheckOutDate = draft.CheckOutDate;
-                model.amenity = draft.amenity == null ? 0 : draft.amenity;
-                model.Plan = draft.mealPlan == null ? 0 : draft.mealPlan;
-                string text;
-                if (draft.UsedPromoCodeId != null)
-                {
-                     text = reservationservice.GETCODEText((int)draft.UsedPromoCodeId);
-				}
-                else
-                {
-                    text = "";
-
-				}
-                    model.PromoCode = text == "" ? "" : text;
-			}
-            else
-            {
-                RedirectToAction("Index", "Home");
-            }
-                
-            return View("Reserve", model);
 		}
 
 		// GET: ReservationController/Create

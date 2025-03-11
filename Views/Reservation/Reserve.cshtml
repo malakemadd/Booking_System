@@ -313,7 +313,7 @@
 
                 <form asp-action="Reserve">
                     <div asp-validation-summary="All" class="text-danger"></div>
-
+                    <input asp-for="rooms" hidden />
                     <!-- Date Selection -->
                     <div class="mb-3">
                         <label class="fw-bold" asp-for="CheckInDate">Check-in</label>
@@ -387,7 +387,7 @@
                         <button type="submit" formaction="/Reservation/SaveinDraft" class="btn btn-secondary w-50" style="border-radius: 10px;">
                             <i class="fa-solid fa-save"></i> Save as Draft
                         </button>
-                        <button type="submit" formaction="/Reservation/Reserve" class="btn w-50" style="border-radius: 10px; background-color: #1a374d; color: white;">
+                        <button type="submit" formaction="/Reservation/ConfirmReserve" class="btn w-50" style="border-radius: 10px; background-color: #1a374d; color: white;">
                             <i class="fa-solid fa-check"></i> Proceed to Payment
                         </button>
                     </div>

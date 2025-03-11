@@ -591,11 +591,20 @@
 
                                                    @*  <span style="font-size:10px">Please note that this price excludes additional features.</span> *@
 
-                                                    <a class="btn btn-sm mt-2" style="background-color: #1a374d; color: white;"
-                                                       asp-action="Reserve"
-                                                       asp-route-RoomsCombination="@JsonSerializer.Serialize(combination,options)">
-                                                        Reserve
-                                                    </a>
+                                                    @if (User.Identity.IsAuthenticated)
+                                                    {
+                                                        <form asp-action="Reserve" method="post">
+                                                            <input type="hidden" name="RoomsCombination" value="@JsonSerializer.Serialize(combination,options)" />
+
+                                                            <button type="submit" class="btn btn-success">Reserve</button>
+                                                        </form>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="Login" asp-controller="Account" class="btn btn-success" style="gap:5px;">
+                                                            Reserve
+                                                        </a>
+                                                    }
                                                 </div>
                                             </div>
                                         </div> <!-- End Card Body -->
