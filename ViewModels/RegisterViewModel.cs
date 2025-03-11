@@ -22,10 +22,10 @@ namespace MVCBookingFinal_YARAB_.ViewModels
 		[MinLength(11)]
 		public string PhoneNumber { set; get; }
 		[DataType(DataType.Password)]
-		public string Password { set; get; }
+		public string? Password { set; get; }
 		[Compare("Password")]
 		[DataType(DataType.Password)]
-		public string ConfirmPassword { set; get; }
+		public string? ConfirmPassword { set; get; }
 
 		[ImageExtension]
 		[NotMapped]

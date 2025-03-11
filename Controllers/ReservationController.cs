@@ -134,15 +134,23 @@ namespace MVCBookingFinal_YARAB_.Controllers
             }
         }
 
-        // GET: ReservationController/Details/5
-        [Authorize]
+		// GET: ReservationController/Details/5
+		[Authorize]
+        //public async Task<ActionResult> Reserve(string RoomsCombination
+        [HttpPost]
 		public async Task<ActionResult> Reserve(string RoomsCombination)
-        {
-		
-			List<Room>rooms=JsonConvert.DeserializeObject<List<Room>>(RoomsCombination);
-            
-			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
-            ViewBag.MyHotel = rooms.FirstOrDefault().Hotel;
+		{
+            if(RoomsCombination=="temp")
+            {
+                ModelState.AddModelError("", "reservation failed, probably incorrect date");
+                RoomsCombination = (string)TempData["FailedReserve"];
+
+			}
+            List<Room> rooms = JsonConvert.DeserializeObject<List<Room>>(RoomsCombination);
+
+            SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
+			TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
+			ViewBag.MyHotel = rooms.FirstOrDefault().Hotel;
 			//List<ReservationRoom> reservationRooms = new List<ReservationRoom>();
    //         foreach(var room in rooms)
    //         {
@@ -190,30 +198,57 @@ namespace MVCBookingFinal_YARAB_.Controllers
 					rooms = RoomsCombination
 
                 };
-
+			
 			return View(vm);
         }
 
         [HttpPost]
-		[Authorize]
-		public async Task<ActionResult> Reserve(ReservationViewModel vm)
-		{
+        [Authorize]
+        public async Task<ActionResult> ConfirmReserve(ReservationViewModel vm)
+        {
+			var options = new JsonSerializerOptions
+			{
+				ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+			};
 			List<Room> rooms = JsonConvert.DeserializeObject<List<Room>>(vm.rooms);
-			ViewBag.MyHotel = rooms.FirstOrDefault().Hotel;
+            ViewBag.MyHotel = rooms.FirstOrDefault().Hotel;
 
-			if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return View(vm);
-            }
-            if(vm.CheckInDate is null || vm.CheckOutDate is null)
+                TempData["FailedReserve"] = JsonSerializer.Serialize(rooms, options);
+
+				return RedirectToAction("Index", "Home");
+			}
+			if (vm.CheckInDate is null || vm.CheckOutDate is null)
             {
-                ModelState.AddModelError("","Dates has to be added");
-                return View(vm);
-            }
+                ModelState.AddModelError("", "Dates has to be added");
+				TempData["FailedReserve"] = JsonSerializer.Serialize(rooms, options);
+				return RedirectToAction("Index", "Home");
+			}
+
+			foreach (var room in rooms)
+            {
+                if (room.Reserved.Any(r => r.Reservation.CheckInDate >= vm.CheckInDate && r.Reservation.CheckInDate <= vm.CheckOutDate)
+                 || room.Reserved.Any(r => r.Reservation.CheckInDate <= vm.CheckInDate && r.Reservation.CheckOutDate >= vm.CheckInDate))
+                {
+					ModelState.AddModelError("", "Room will be unavailable in those timelines");
+					TempData["FailedReserve"] = JsonSerializer.Serialize(rooms, options);
+					return RedirectToAction("Index","Home");
+				}
+			}
+            
 			var user = await usermanager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            reservationservice.Delete(User.FindFirstValue(ClaimTypes.NameIdentifier));
-			return View(vm);
+            var reservation=reservationservice.SaveReservation(vm, rooms, User.FindFirstValue(ClaimTypes.NameIdentifier));
+			reservationservice.Delete(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            InvoiceConfirmationViewModel invoice = new ()
+            {
+                Tax=10,
+                Reservation= reservation
+
+			};
+            TempData["ReservationId"] = reservation.Id;
+			return View(nameof(InvoiceConfirmation), invoice);
 		}
 
 		[HttpPost]
@@ -297,11 +332,11 @@ namespace MVCBookingFinal_YARAB_.Controllers
 		}
 
 		// GET: ReservationController/Create
-		public ActionResult Create()
+		public ActionResult InvoiceConfirmation()
         {
             return View();
         }
-
+  
         // POST: ReservationController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]

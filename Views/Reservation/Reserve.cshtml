@@ -85,7 +85,9 @@
                 <span asp-validation-for="PromoCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Reserve" formaction="/Reservation/Reserve" class="btn btn-primary" />
+
+                <input type="submit" value="Reserve" formaction="/Reservation/ConfirmReserve" class="btn btn-primary" />
+        
                 <input type="submit" value="Save to draft" id="saveDraftButton" formaction="/Reservation/SaveinDraft" class="btn btn-primary" />
             </div>
         </form>

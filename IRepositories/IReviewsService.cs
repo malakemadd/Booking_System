@@ -1,4 +1,6 @@
-﻿namespace MVCBookingFinal_YARAB_.IRepositories
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace MVCBookingFinal_YARAB_.IRepositories
 {
     public interface IReviewsService
     {
@@ -9,5 +11,7 @@
         public void UpdateReview(ReviewViewModel r);
         public void DeleteReview(int id);
 
+        public void GetTopReviews();
+        public List<Review> GetReviewByHotel(int Id);
     }
 }

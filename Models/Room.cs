@@ -27,9 +27,20 @@ namespace MVCBookingFinal_YARAB_.Models
 		public double PricePerNight { set; get; }
 		[Range(0,100)]
 		public int Floor { set; get; }
-		[EnumDataType(typeof(RoomStatus))]
+		[EnumDataType(typeof(RoomStatus))] 
 
 		public RoomStatus Status;
+
+		//[EnumDataType(typeof(RoomStatus))]
+		//[NotMapped]
+
+		//public RoomStatus Status2 =>
+		//	this.Reserved.OrderBy(r => r.Reservation.CheckOutDate)
+		//	.LastOrDefault().Reservation.CheckOutDate <= DateTime.Now ?
+		//	RoomStatus.Available :
+		//	this.Reserved.OrderBy(r => r.Reservation.CheckInDate)
+		//	.LastOrDefault().Reservation.CheckInDate >= DateTime.Now ?
+		//	RoomStatus.Available : RoomStatus.Reserved;
 		public List<RoomImage> Images { set; get; }
 
 		public List<DraftReservationRoom> DraftReservations { get; set; } = new();

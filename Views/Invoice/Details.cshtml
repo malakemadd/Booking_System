@@ -11,6 +11,38 @@
     <h4>Invoice</h4>
     <hr />
     <dl class="row">
+        @* @if(Model.Payment.payment.GetType()==typeof(StripePaymentMethod)) *@
+        @if(Model.Payment.payment is StripePaymentMethod method)
+        {
+            @* @{
+                Model.Payment.payment is StripePaymentMethod method;
+            } *@
+            <dt class="col-sm-2">
+                StripeId
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => method.AccountNumber)
+            </dd>
+        }
+        else
+        @if (Model.Payment.payment is CardPaymentMethod method2)
+        {
+            @* @{
+                Model.Payment.payment is StripePaymentMethod method;
+            } *@
+            <dt class="col-sm-2">
+                CardNumber
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => method2.CardNumber)
+            </dd>
+            <dt class="col-sm-2">
+                CVV
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => method2.CVV);
+            </dd>
+        }
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Reservation.Id)
         </dt>

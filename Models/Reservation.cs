@@ -34,7 +34,10 @@ namespace MVCBookingFinal_YARAB_.Models
 		[NotMapped]
 		public double TotalAmount => ((((this.mealPlan.Price + this.Reserved.Select(r=>r.Room).Sum(r=>r.PricePerNight)) * (CheckOutDate.Day - CheckInDate.Day)) + this.amenity.Price)) ; // for all rooms
 		[NotMapped]
-		public double AfterDiscount => TotalAmount * (100 - UsedPromoCodes.Select(u => u.PromoCode).Where(p => p.IsActive).Sum(p => p.Discount)) / 100;
+		public bool usedfcodes => UsedPromoCodes is not null;
+		[NotMapped]
+		public double AfterDiscount => TotalAmount
+			* (100 - (usedfcodes ? UsedPromoCodes.Select(u => u.PromoCode).Where(p => p.IsActive).Sum(p => p.Discount) : 0)) / 100;
 
 
 

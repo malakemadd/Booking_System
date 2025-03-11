@@ -6,7 +6,7 @@
 
 
 @{
- 
+
 
     ViewData["Title"] = "Home Page";
     Dictionary<string, string> countriesOrCities = new();
@@ -45,18 +45,11 @@
 
 
 <body>
-    @* 
 
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    </div> *@
 
 
     <link href="~/css/Home.css" rel="stylesheet">
-
-
 
 
 
@@ -166,7 +159,7 @@
 
 
 
-  
+
 
 
 
@@ -214,7 +207,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <script>
 
@@ -250,11 +243,17 @@
                 const children = document.getElementById('children').value;
                 const rooms = document.getElementById('rooms').value;
 
+
                 // Update the textarea field
                 const guestsRoomsInput = document.getElementById('guestsRoomsInput');
                 const selectedText = `${parseInt(adults) +parseInt(children)} guetst, ${rooms} Rooms`;
                 guestsRoomsInput.value = selectedText;
 
+
+                // Update the textarea field
+                const guestsRoomsInput = document.getElementById('guestsRoomsInput');
+                const selectedText = `${parseInt(adults) +parseInt(children)} guetst, ${rooms} Rooms`;
+                guestsRoomsInput.value = selectedText;
 
                 // Close the dropdown
                 const dropdownMenu = document.querySelector('.dropdown-menu');
@@ -278,6 +277,7 @@
     </script>
 
 </body>
+</html>
 </html>
 
 

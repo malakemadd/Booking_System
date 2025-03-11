@@ -96,13 +96,25 @@ namespace MVCBookingFinal_YARAB_.Repositories
 
 				.Include(r => r.Reserved)
 				.ThenInclude(R => R.User)
+				.Include(r => r.Reserved)
+				.ThenInclude(r => r.Reservation)
+				.Include(r => r.Reserved)
+				.ThenInclude(r => r.Reservation).ThenInclude(r => r.mealPlan)
+				.Include(r => r.Reserved)
+				.ThenInclude(r => r.Reservation).ThenInclude(r => r.amenity)
+				.Include(r => r.Reserved)
+				.ThenInclude(r => r.Reservation).ThenInclude(r => r.UsedPromoCodes).ThenInclude(PC => PC.PromoCode)
 				.Include(h => h.Images)
 				.Include(h => h.Hotel).ThenInclude(h => h.Images)
 				.Include(h => h.Hotel).ThenInclude(h => h.Favorites).ThenInclude(f => f.User)
 				.Include(h => h.Hotel).ThenInclude(H => H.Ameneties)
-				.Where(r => r.HotelId == id).Where(r => r.Reserved.All(res =>
-						res.Reservation.CheckOutDate <= vm.CheckInDate ||
-						res.Reservation.CheckInDate >= vm.CheckOutDate));
+				.Where(r => r.HotelId == id).Where(room =>
+					// old =>11~14
+					// if new => 13-15  first any gives an error because checkin >11  but not >14
+					// if new => 8-12  first any gives an error because checkin <11  but not <14
+					!(room.Reserved.Any(r => r.Reservation.CheckInDate >= vm.CheckInDate && r.Reservation.CheckInDate <= vm.CheckOutDate)
+				 || room.Reserved.Any(r => r.Reservation.CheckInDate <= vm.CheckInDate && r.Reservation.CheckOutDate >= vm.CheckInDate)));
+						
 
 			var combinations = GetCombinations(query.ToList(), (int)roomsnum);
 			var roomCombinations = combinations.Where(combination =>
