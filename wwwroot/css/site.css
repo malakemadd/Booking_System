@@ -23,8 +23,9 @@ body {
 /*Cards*/
 .content {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 10px;
+/*    flex-wrap:wrap;*/
 }
 .content .cardholder {
     border-radius: 6px;
@@ -33,32 +34,27 @@ body {
     padding: 3px;        
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    justify-content:center;
+/*    align-items: center;*/
 }
 
 .content .cardholder .imageholder {  
-    max-width: 50%;
+    max-width: 70%;
+/*    max-height:30%;*/
     margin-right: 20px;
 }
 
-.content .cardholder .imageholder .image {
-    max-width: 100%;
-}
-/*.site-nav {*/
-    /* position: absolute; */
-    /* top: 0; */
-    /*background-color: #1A374D;
-    z-index: 9;
-    width: 100%;
-}*/
+    .content .cardholder .imageholder .image {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
 .navbar {
     background-color: white;
     width: 100%;
     padding-top: 0;
     padding-bottom: 0;
-/*    position:absolute;
-    top:30px;
-    left:0;*/
+
 }
 
 .navbar .navbar-brand {
@@ -147,4 +143,62 @@ flex-direction: column;
 .malakregister{
     margin:0 auto;
 }
+.trendingcontainer {
 
+    text-align:center;
+}
+.featuers {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color: #f6f6f6;
+}
+
+    .featuers .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+/*        gap: 10px;*/
+    }
+
+    .featuers .feat {
+        padding: 10px;
+        text-align: center;
+        max-height:70%;
+
+    }
+    .featuers .feat img{
+        max-width:100%;
+        max-height:100%;
+        border-radius:10px;
+    }
+.Trending {
+    margin-top: 60px;
+}
+    .Trending h2,
+    .Trending p {
+        text-align: center;
+    }
+    .Trending container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px));
+/*        gap: 20px;*/
+    }
+    .Trending .cardholder {
+        display:flex;
+        flex-direction:column;
+        
+/*        justify-content:space-around;*/
+        gap:10px;
+    }
+        .Trending .cardholder .upper {
+            display: flex;
+/*            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));*/
+            gap:20px;
+            padding:10px;
+        }
+            .Trending .cardholder .upper div{
+                min-width:515px;
+
+            }
+            .Trending .cardholder .lower {
+                display: flex;
+            }    

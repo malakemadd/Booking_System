@@ -19,23 +19,16 @@
 </head>
 <body>
 
-<h1>Index</h1>
-<div class="container">
+<div class="container mb-5">
 @if (User.IsInRole("ADMIN"))
 {
     <p>
         <a asp-action="Create" class="btn btn-success">Create New</a>
     </p>
 }
-    <div class="content">
+    <div class="content ">
         @foreach (var room in Model)
         {
-            @* <img src="~/ProductsImages/@img.Image"
-                 data-src="@Url.Content("~/ProductsImages/" + img.Image)"
-                 class="img-thumbnail img-clickable"
-                 data-bs-toggle="modal"
-                 data-bs-target="#imageModal"
-                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;" /> *@
             <div class="cardholder">
                 <div class="imageholder ">
                       <div class="image">
@@ -64,36 +57,18 @@
 
                     <label>RoomStatus :</label>
                     <span>@room.Status</span>
-                    <br />                    
+                    <br />
+                        <div class="my-3">
+                            <a asp-action="Details" asp-route-id="@room?.Id" class="btn btn-info " >Details</a>
+                            <a asp-action="Edit" asp-route-id="@room?.Id" class="btn btn-primary ">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@room?.Id" class="btn btn-danger ">Delete</a>
+                        </div>
                 </div>
                 
             </div>
         }
     </div>
 </div>
-
-               @*  <td>
-                    @foreach (var img in @item.Images)
-                    {
-                        <img src="~/ProductsImages/@img.Image"
-                        data-src="@Url.Content("~/ProductsImages/" + img.Image)"
-                        class="img-thumbnail img-clickable"
-                             data-bs-toggle="modal"
-                             data-bs-target="#imageModal"
-                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer;" />
-                    }
-                </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Add to maintainence</a>
-            </td> *@
-        
-        
-
-
-
-
 <partial name="_modalPartial"></partial>
 </body>
 </html>

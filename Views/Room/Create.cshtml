@@ -3,25 +3,26 @@
 @{
     ViewData["Title"] = "Create";
 }
+<div class="container mb-5">
 
 <h1>Create</h1>
 
-<h4>Room</h4>
+
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row form col-6 mx-auto">
+    <div class="col-md-8">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
             <partial name="EditCreate"></partial>
-            <div class="form-group">
+            <div class="form-group text-center">
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
