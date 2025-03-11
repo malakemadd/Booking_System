@@ -3,39 +3,56 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
-<h4>Report</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="card shadow-lg p-4 rounded-4" style="width: 450px; background-color: #f8f9fa; border: none;">
+        <h2 class="text-center mt-3" >Edit Report</h2>
+        <hr />
+       
         <form asp-action="Edit">
             <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
-                <label asp-for="HotelId" class="control-label"></label>
-                <select asp-for="HotelId" class="form-control" asp-items="ViewBag.HotelId"></select>
+                <label asp-for="HotelId" class="form-label fw-bold"></label>
+                <select asp-for="HotelId" class="form-select border-2" asp-items="ViewBag.HotelId"></select>
                 <span asp-validation-for="HotelId" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Complaint" class="control-label"></label>
-                <input asp-for="Complaint" class="form-control" />
+            <div class="form-group ">
+                <label asp-for="Complaint" class="form-label fw-bold"></label>
+                <input asp-for="Complaint" class="form-control border-2" placeholder="Enter your complaint..." />
                 <span asp-validation-for="Complaint" class="text-danger"></span>
             </div>
-          
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-group d-grid gap-2" id="formbtn">
+                <button type="submit" class="btn btn-primary px-4 py-2 fw-bold shadow-sm">Save</button>
+            </div>
+            <div class="text-center mt-3">
+                <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left"></i> Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+<style>
+    h2 {
+        color: #1A374D;
+        font-weight: bold;
+    }
+
+    .formbtn {
+        width: 50px;
+    }
+
+    .btn-primary:hover {
+        background-color: #406882;
+    }
+</style>
