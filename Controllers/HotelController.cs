@@ -25,6 +25,8 @@ namespace MVCBookingFinal_YARAB_.Controllers
         // GET: HotelController/Details/5
         public ActionResult Details(int id)
         {
+            
+
             return View(hotelservice.GetById(id));
         }
 

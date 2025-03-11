@@ -25,7 +25,7 @@ namespace MVCBookingFinal_YARAB_.Repositories
 				.Include(i => i.Payment).ThenInclude(p => p.payment).Include(i => i.Reservation)
 				.ThenInclude(R => R.Reserved).ThenInclude(r => r.Room).ThenInclude(r => r.Hotel).
 				Include(i => i.Reservation).ThenInclude(R => R.UsedPromoCodes).ThenInclude(u => u.PromoCode)
-
+				.Include(i=>i.Reservation).ThenInclude(r=>r.Reserved).ThenInclude(r=>r.User)
 				.Include(i => i.Reservation)
 				.ThenInclude(R => R.mealPlan)
 
@@ -41,6 +41,7 @@ namespace MVCBookingFinal_YARAB_.Repositories
 				.Include(i => i.Payment).ThenInclude(p => p.payment).Include(i => i.Reservation)
 				.ThenInclude(R => R.Reserved).ThenInclude(r => r.Room).ThenInclude(r => r.Hotel).
 				Include(i => i.Reservation).ThenInclude(R => R.UsedPromoCodes).ThenInclude(u => u.PromoCode)
+				.Include(i => i.Reservation).ThenInclude(r => r.Reserved).ThenInclude(r => r.User)
 
 				.Include(i => i.Reservation)
 				.ThenInclude(R => R.mealPlan)
@@ -57,6 +58,7 @@ namespace MVCBookingFinal_YARAB_.Repositories
 				.Include(i => i.Payment).ThenInclude(p => p.payment).Include(i => i.Reservation)
 				.ThenInclude(R => R.Reserved).ThenInclude(r => r.Room).ThenInclude(r => r.Hotel).
 				Include(i => i.Reservation).ThenInclude(R => R.UsedPromoCodes).ThenInclude(u => u.PromoCode)
+				.Include(i => i.Reservation).ThenInclude(r => r.Reserved).ThenInclude(r => r.User)
 
 				.Include(i => i.Reservation)
 				.ThenInclude(R => R.mealPlan)

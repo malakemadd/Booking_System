@@ -209,11 +209,13 @@ flex-direction: column;
     min-width:515px;
 
 }
-.Trending .cardholder .lower {
-    display: flex;
+.malakregister{
+    margin:0 auto;
 }
-.favoriteiconcontainer{
-    position:absolute;
-    right:0;
-    top:10px;
+
+.TotalPayment{
+    /*margin-left:220px;*/
+    text-align:center;
 }
+
+

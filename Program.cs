@@ -14,6 +14,8 @@ namespace MVCBookingFinal_YARAB_
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
+			//builder.Services.AddSession();
+
 			builder.Services.AddControllersWithViews();
 
 			#region Services
@@ -76,6 +78,17 @@ namespace MVCBookingFinal_YARAB_
 			//builder.Services.AddScoped<Iused, FavoritesService>(); 
 			#endregion
 			var app = builder.Build();
+			bool isFirstRequest = true;
+			app.Use(async (context, next) =>
+			{
+				// Clear TempData cookies on every request
+				if (isFirstRequest)
+				{
+					context.Response.Cookies.Delete(".AspNetCore.TempData"); // Clear TempData cookie
+					isFirstRequest = false;
+				}
+				await next.Invoke();
+			});
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())

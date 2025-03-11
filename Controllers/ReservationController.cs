@@ -25,30 +25,10 @@ namespace MVCBookingFinal_YARAB_.Controllers
         {
             return View();
         }
-        public IActionResult ViewHotels(SearchViewModel vm,int pagenum=0)
-        {
-            
-
-
-            if(vm.CheckInDate>vm.CheckOutDate)
-            {
-                return RedirectToAction("index", "home");
-            }
-            ViewBag.PageNum = pagenum;
-            TempData["myviewmodel"] = JsonConvert.SerializeObject(vm);
-			var hotelsquery = hotelservice.GetAllFilteredPaginated(PerPage: 10,
-                pagenum: pagenum,
-                city: vm.CountryOrCity,
-                country: vm.CountryOrCity,
-                vm:vm
-                );
-
-
-			return View(hotelsquery);
-        }
         public IActionResult nextPage(int pagenum)
         {
-            SearchViewModel myvm= JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
+            SearchViewModel myvm= JsonConvert.DeserializeObject<SearchViewModel>(TempData.Peek("myviewmodel").ToString());
+			//TempData.Keep("myviewmodel");
 			ViewBag.PageNum = pagenum;
 			var hotelsquery = hotelservice.GetAllFilteredPaginated(PerPage: 10,
 				pagenum: pagenum,
@@ -57,7 +37,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
 				vm: myvm
 				);
 			
-			TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
+			//TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
 			return View("ViewHotels", hotelsquery);		
         }
 		public IActionResult PicturePress(string countryorcity)
@@ -80,15 +60,56 @@ namespace MVCBookingFinal_YARAB_.Controllers
 				);
             return View("ViewRooms", hotelsquery.Take(5));
 		}
-        public IActionResult GoToHotel(int id,RoomFilterationViewModel vm=null,bool checkfilteration=false)
+        public IActionResult ViewHotels(SearchViewModel vm,int pagenum=0)
+        {
+            
+            if(vm.CheckInDate>vm.CheckOutDate)
+            {
+                return RedirectToAction("index", "home");
+            }
+            ViewBag.PageNum = pagenum;
+            TempData["myviewmodel"] = JsonConvert.SerializeObject(vm);
+			var hotelsquery = hotelservice.GetAllFilteredPaginated(PerPage: 10,
+                pagenum: pagenum,
+                city: vm.CountryOrCity,
+                country: vm.CountryOrCity,
+                vm:vm
+                );
+
+
+			return View(hotelsquery);
+        }
+        public IActionResult FilterHotels(HotelFilterViewModel model)
+        {
+			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData.Peek("myviewmodel").ToString());
+			//TempData.Keep("myviewmodel");
+			//TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
+			ViewBag.PageNum = 0;
+			var hotelsquery = hotelservice.GetAllFilteredPaginated(PerPage: 10,
+				pagenum: 0,
+				city: myvm.CountryOrCity,
+				country: myvm.CountryOrCity,
+				vm: myvm
+				).Where(h=>(h.Ameneties.Amenities&model.Amenities)==model.Amenities)
+                .OrderByDescending(h=> model.Sorting==HotelsortBy.StarsRating? h.starRating:
+				model.Sorting == HotelsortBy.ReviewsRating ? 
+                (h.Reviewed.Count() == 0 ? 0 : h.Reviewed.Sum(r => r.Rating) / h.Reviewed.Count()) :
+				h.id);
+            ViewBag.Sorting = model.Sorting;
+            ViewBag.Amenities = model.Amenities;
+			return View(nameof(ViewHotels),hotelsquery);
+		}
+
+		public IActionResult GoToHotel(int id,RoomFilterationViewModel vm=null,bool checkfilteration=false)
         {
                 
-			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
-            var result = roomService.GetCombinationsByHotelId(id, myvm);
+			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData.Peek("myviewmodel").ToString());
+			//TempData.Keep("myviewmodel");
+			var result = roomService.GetCombinationsByHotelId(id, myvm);
             ViewBag.AllHotels = result;
 			ViewBag.Hotel = result.FirstOrDefault().FirstOrDefault().Hotel;
 			//ViewBag.CanMatchAmenties = true;
-			TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
+			//TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
             if(!checkfilteration)
             {
 
@@ -148,24 +169,13 @@ namespace MVCBookingFinal_YARAB_.Controllers
 			}
             List<Room> rooms = JsonConvert.DeserializeObject<List<Room>>(RoomsCombination);
 
-            SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
-			TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
-			ViewBag.MyHotel = rooms.FirstOrDefault().Hotel;
-			//List<ReservationRoom> reservationRooms = new List<ReservationRoom>();
-   //         foreach(var room in rooms)
-   //         {
-   //             reservationRooms.Add(new()
-   //             {
-   //                 RoomId = room.Id,
-   //                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-   //                 IsDeleted = true
-   //             });
-   //         }
-            //var user = await usermanager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData.Peek("myviewmodel").ToString());
+
+			ViewBag.MyHotel = rooms.FirstOrDefault().Hotel;	
 
             DraftReservation draft = new()
             {
-                //Reserved = rooms
+
             };
 			
             if(myvm.CheckInDate!=default)
@@ -201,6 +211,49 @@ namespace MVCBookingFinal_YARAB_.Controllers
 			
 			return View(vm);
         }
+		[HttpGet]
+        [Authorize]
+		public async Task<ActionResult> ViewMyDraft()
+		{
+            //var user=await usermanager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var draft=reservationservice.getUserReservation(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            ReservationViewModel model = new();
+
+			if (draft is not null)
+            {
+                var hotel= draft.Reserved.FirstOrDefault().Reserved.Hotel; ;
+				ViewBag.MyHotel = hotel;
+                
+					var options = new JsonSerializerOptions
+					{
+						ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+					};
+
+                
+				model.rooms = JsonSerializer.Serialize(draft.Reserved.Select(r => r.Reserved), options);
+				model.CheckInDate = draft.CheckInDate;
+                model.CheckOutDate = draft.CheckOutDate;
+                model.amenity = draft.amenity == null ? 0 : draft.amenity;
+                model.Plan = draft.mealPlan == null ? 0 : draft.mealPlan;
+                string text;
+                if (draft.UsedPromoCodeId != null)
+                {
+                     text = reservationservice.GETCODEText((int)draft.UsedPromoCodeId);
+				}
+                else
+                {
+                    text = "";
+
+				}
+                    model.PromoCode = text == "" ? "" : text;
+			}
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+                
+            return View("Reserve", model);
+		}
 
         [HttpPost]
         [Authorize]
@@ -215,14 +268,13 @@ namespace MVCBookingFinal_YARAB_.Controllers
 
             if (!ModelState.IsValid)
             {
-                TempData["FailedReserve"] = JsonSerializer.Serialize(rooms, options);
+            
 
 				return RedirectToAction("Index", "Home");
 			}
 			if (vm.CheckInDate is null || vm.CheckOutDate is null)
             {
-                ModelState.AddModelError("", "Dates has to be added");
-				TempData["FailedReserve"] = JsonSerializer.Serialize(rooms, options);
+
 				return RedirectToAction("Index", "Home");
 			}
 
@@ -232,7 +284,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
                  || room.Reserved.Any(r => r.Reservation.CheckInDate <= vm.CheckInDate && r.Reservation.CheckOutDate >= vm.CheckInDate))
                 {
 					ModelState.AddModelError("", "Room will be unavailable in those timelines");
-					TempData["FailedReserve"] = JsonSerializer.Serialize(rooms, options);
+
 					return RedirectToAction("Index","Home");
 				}
 			}
@@ -286,49 +338,6 @@ namespace MVCBookingFinal_YARAB_.Controllers
             draft.UsedPromoCodeId = reservationservice.GETCODE(vm.PromoCode)?.Id;
 			await reservationservice.savedraft(draft, User.FindFirstValue(ClaimTypes.NameIdentifier), rooms);
 			return View("Reserve",vm);
-		}
-		[HttpGet]
-        [Authorize]
-		public async Task<ActionResult> ViewMyDraft()
-		{
-            //var user=await usermanager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var draft=reservationservice.getUserReservation(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            ReservationViewModel model = new();
-
-			if (draft is not null)
-            {
-                var hotel= draft.Reserved.FirstOrDefault().Reserved.Hotel; ;
-				ViewBag.MyHotel = hotel;
-                
-					var options = new JsonSerializerOptions
-					{
-						ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
-					};
-
-                
-				model.rooms = JsonSerializer.Serialize(draft.Reserved.Select(r => r.Reserved), options);
-				model.CheckInDate = draft.CheckInDate;
-                model.CheckOutDate = draft.CheckOutDate;
-                model.amenity = draft.amenity == null ? 0 : draft.amenity;
-                model.Plan = draft.mealPlan == null ? 0 : draft.mealPlan;
-                string text;
-                if (draft.UsedPromoCodeId != null)
-                {
-                     text = reservationservice.GETCODEText((int)draft.UsedPromoCodeId);
-				}
-                else
-                {
-                    text = "";
-
-				}
-                    model.PromoCode = text == "" ? "" : text;
-			}
-            else
-            {
-                RedirectToAction("Index", "Home");
-            }
-                
-            return View("Reserve", model);
 		}
 
 		// GET: ReservationController/Create

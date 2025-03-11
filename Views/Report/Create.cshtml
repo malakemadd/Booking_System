@@ -1,44 +1,60 @@
 ﻿@model MVCBookingFinal_YARAB_.Models.Report
 
 @{
-    ViewData["Title"] = "Create";
-
-
-    
+    ViewData["Title"] = "Create Report";
 }
 
-<h1>Create</h1>
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 bg-white rounded">
+        <h2 class="text-center " style="color:#1a374d">Add a New Report</h2>
+        <hr />
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form asp-action="Create">
+                    <div asp-validation-summary="All" class="text-danger"></div>
 
-<h4>Report</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="HotelId" class="control-label"></label>
-                <select asp-for="HotelId" class ="form-control" asp-items="ViewBag.HotelId"></select>
-         
+                    <div class="form-group mb-3">
+                        <label asp-for="HotelId" class="form-label fw-bold">Hotel Name</label>
+                        <select asp-for="HotelId" class="form-select" asp-items="ViewBag.HotelId"></select>
+                    </div>
 
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Complaint" class="form-label fw-bold"></label>
+                        <textarea asp-for="Complaint" class="form-control" rows="4" placeholder="Enter complaint details..."></textarea>
+                        <span asp-validation-for="Complaint" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="Complaint" class="control-label"></label>
-                <input asp-for="Complaint" class="form-control" />
-                <span asp-validation-for="Complaint" class="text-danger"></span>
+                    <div class="form-group d-grid gap-2" style="height:50px">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Submit Report</button>
+                        
+                        <a asp-action="Index" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
+                        
+                    </div>
+                </form>
             </div>
-          
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<style>
+    .card {
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .btn-primary {
+        background-color: #1a374d;
+        border-color: #1a374d;
+    }
+
+        .btn-primary:hover {
+            background-color: #406882;
+            border-color: #406882;
+        }
+</style>

@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="~/css/Home.css" rel="stylesheet">
 
-
+   
     <style>
 
 
@@ -53,25 +53,31 @@
             align-items: center;
         }
 
-        .navbar-brand img {
-            height: 50px; /* Adjust if needed */
-            width: 50px; /* Adjust if needed */
-            object-fit: cover;
-        }
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="~/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="~/fonts/flaticon/font/flaticon.css">
 
-        .navbar-brand span {
-            font-weight: bold;
-            color: #1A374D; /* Your provided hex color */
+
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+            top: 0;
+            left: 0;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
 
         #Users-types {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
+    @RenderSection("Styles", required: false)
         }
 
     </style>
+    <link href="~/css/Home.css" rel="stylesheet">
+    
 
 </head>
 
@@ -314,18 +320,29 @@
             // Search Box functionality
             searchBox = new google.maps.places.SearchBox(document.getElementById('searchBox'));
             map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('searchBox'));
-
-            // Bias the SearchBox results to the map's viewport
-            map.addListener('bounds_changed', function() {
+			images.each(function(i) {
+				$(this).attr('data-id', i + 1);
+			})
                 searchBox.setBounds(map.getBounds());
-            });
-
-            // When the user selects a place from the suggestions
-            searchBox.addListener('places_changed', function() {
-                const places = searchBox.getPlaces();
-
-                if (places.length == 0) {
-                    return;
+			var typed = new Typed('.typed-words', {
+				strings: ["San Francisco."," Paris."," New Zealand.", " Maui.", " London."],
+				typeSpeed: 80,
+				backSpeed: 80,
+				backDelay: 4000,
+				startDelay: 1000,
+				loop: true,
+				showCursor: true,
+				preStringTyped: (arrayPos, self) => {
+					arrayPos++;
+					console.log(arrayPos);
+					$('.slides img').removeClass('active');
+					$('.slides img[data-id="'+arrayPos+'"]').addClass('active');
+				}
+                preStringTyped: (arrayPos, self) => {
+                    arrayPos++;
+                    console.log(arrayPos);
+                    $('.slides img').removeClass('active');
+                    $('.slides img[data-id="'+arrayPos+'"]').addClass('active');
                 }
 
                 // Clear previous markers
