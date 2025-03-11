@@ -88,56 +88,6 @@ namespace MVCBookingFinal_YARAB_.Controllers
         }
 
 
-		// GET: Favorites/Edit/5
-		//public IActionResult Edit(int id)
-		//    {
-
-		//    var favorite = _favoritesService.GetFavoriteById(id);
-		//        if (favorite == null)
-		//        {
-		//            return NotFound();
-		//        }
-		//    var user = _userManager.Users.FirstOrDefault(u => u.Id == favorite.UserId);
-		//    FavoritesViewModel favoriteVM = new()
-		//    {
-		//        Id = favorite.Id,
-		//        HotelId = favorite.HotelId,
-		//        HotelName = favorite.Hotel.Name
-		//    };
-		//    ViewBag.Hotels = new SelectList(_hotelService.GetAll(), "Id", "Name", favorite.HotelId);
-		//    ViewBag.Users = new SelectList(_userManager.Users.ToList(), "Id", "UserName", favorite.UserId);
-
-		//    return View(favoriteVM);
-		//    }
-
-		// POST: Favorites/Edit/5
-		//[HttpPost]
-		//[ValidateAntiForgeryToken]
-
-		//public IActionResult Edit(FavoritesViewModel favoriteVM)
-		//{
-		//    if (!ModelState.IsValid)
-		//    {
-		//        ViewBag.Hotels = new SelectList(_hotelService.GetAll(), "Id", "Name", favoriteVM.HotelId);
-		//        //ViewBag.Users = new SelectList(_userManager.Users.ToList(), "Id", "UserName", favoriteVM.UserId);
-		//        return View(favoriteVM);
-		//    }
-
-		//    try
-		//    {
-		//        _favoritesService.UpdateFavorite(favoriteVM);
-		//    }
-		//    catch (Exception e)
-		//    {
-		//        ModelState.AddModelError("", e.Message);
-		//        ViewBag.Hotels = new SelectList(_hotelService.GetAll(), "Id", "Name", favoriteVM.HotelId);
-		//        ViewBag.Users = new SelectList(_userManager.Users.ToList(), "Id", "UserName", favoriteVM.UserId);
-		//        return View(favoriteVM);
-		//    }
-
-		//    return RedirectToAction(nameof(Index));
-		//}
-
 
 		// GET: Favorites/Delete/5
 		// [Authorize(Roles = "ADMIN")]
