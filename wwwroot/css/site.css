@@ -121,24 +121,34 @@ flex-direction: column;
     margin: 0 auto;
 }
     .loginform{
-        margin-bottom:30px;
+/*        margin-bottom:30px;*/
+        display: flex;
+        
     }
     .googleicon {
         font-size: 18px;
     }
 
+.linkcontainer {
+    display:flex;
+    flex-direction:column;
+/*    flex-wrap:wrap*/
+/*    justify-content:space-between;*/
+}
 .Externallogincontainer {
     display:flex;
     gap:10px;
+    justify-content:center;
+    align-items:center;
 }
-.linkcontainer {
+.forgetlinks{
     display:flex;
-    justify-content:space-between;
-}
-.registerformcontainer{
-    display:flex;
-    gap:20px;
+    flex-direction:column;
 
+}
+.registerformcontainer {
+    display: flex;
+    gap: 20px;
 }
 .malakregister{
     margin:0 auto;
