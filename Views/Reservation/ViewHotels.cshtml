@@ -2,7 +2,16 @@
 
 @{
     ViewData["Title"] = "ViewHotels";
+    var selectlist = Enum.GetValues(typeof(AmenityEnum))
+                    .Cast<AmenityEnum>()
+                    .Where(a => a != AmenityEnum.WiFi)  // Optional: Filter out a specific enum value
+                    .Select(a => new SelectListItem
+                            {
+                                Value = ((int)a).ToString(),  // Enum integer value
+                                Text = a.ToString()        // Enum string name
 
+                            })
+                    .ToList();
 }
 
 
@@ -120,8 +129,41 @@
             <a asp-action="Create">Create New</a>
         </p>
 
+
         <div class="col-sm-12 col-md-2 mb-3 mb-lg-0 col-lg-3  ">
-            <div style="border: black solid 2px; height:100%">
+            <div style="border: black solid 2px; height:100%" class="flex-row align-items-center">
+                <form action="FilterHotels" class="flex-row align-items-center justify-content-center">
+                    @{
+                        HotelsortBy sort = HotelsortBy.OurTopPicks;
+                        if(ViewBag.Sorting is not null)
+                        {
+
+                            sort = ViewBag.Sorting;
+                        }
+                        //ViewBag.Amenities 
+                    }
+                    <select class="form-control" name="Amenities" asp-items="@selectlist" multiple></select>
+                    @* <select class="form-control" name="Sorting" asp-items="@Html.GetEnumSelectList<HotelsortBy>()"></select> *@
+                    <select class ="form-control" name="Sorting">
+                  @foreach (var item in Html.GetEnumSelectList<HotelsortBy>())
+                    {
+                        if (sort == (HotelsortBy)(int.Parse(item.Value)))
+                        {
+                            <option value="@item.Value" selected>
+                                @item.Text
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value" >
+                                @item.Text
+                            </option>
+                        }
+                    }
+                    </select>
+                    <input type="submit" />
+
+                </form>
             </div>
         </div>
 
@@ -172,7 +214,6 @@
                                             <p class="card-text pe-2">@item.city.Name</p>
                                             <a asp-action="GoToHotel" asp-route-id="@item.id" class="card-text pe-2  text-muted text-decoration-none d-block mb-2" >@item.Reviewed.Count reviews</a>
                                             <a asp-action="GoToHotel" asp-route-id="@item.id" class="btn btn-primary btn-sm" style="border-radius:5px">Show Prices</a>
-                                            
                                         </div>
                                     </div>
                                 </div> <!-- End Card Body -->

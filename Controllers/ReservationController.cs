@@ -25,27 +25,6 @@ namespace MVCBookingFinal_YARAB_.Controllers
         {
             return View();
         }
-        public IActionResult ViewHotels(SearchViewModel vm,int pagenum=0)
-        {
-            
-
-
-            if(vm.CheckInDate>vm.CheckOutDate)
-            {
-                return RedirectToAction("index", "home");
-            }
-            ViewBag.PageNum = pagenum;
-            TempData["myviewmodel"] = JsonConvert.SerializeObject(vm);
-			var hotelsquery = hotelservice.GetAllFilteredPaginated(PerPage: 10,
-                pagenum: pagenum,
-                city: vm.CountryOrCity,
-                country: vm.CountryOrCity,
-                vm:vm
-                );
-
-
-			return View(hotelsquery);
-        }
         public IActionResult nextPage(int pagenum)
         {
             SearchViewModel myvm= JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
@@ -80,7 +59,45 @@ namespace MVCBookingFinal_YARAB_.Controllers
 				);
             return View("ViewRooms", hotelsquery.Take(5));
 		}
-        public IActionResult GoToHotel(int id,RoomFilterationViewModel vm=null,bool checkfilteration=false)
+        public IActionResult ViewHotels(SearchViewModel vm,int pagenum=0)
+        {
+            
+            if(vm.CheckInDate>vm.CheckOutDate)
+            {
+                return RedirectToAction("index", "home");
+            }
+            ViewBag.PageNum = pagenum;
+            TempData["myviewmodel"] = JsonConvert.SerializeObject(vm);
+			var hotelsquery = hotelservice.GetAllFilteredPaginated(PerPage: 10,
+                pagenum: pagenum,
+                city: vm.CountryOrCity,
+                country: vm.CountryOrCity,
+                vm:vm
+                );
+
+
+			return View(hotelsquery);
+        }
+        public IActionResult FilterHotels(HotelFilterViewModel model)
+        {
+			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
+			TempData["myviewmodel"] = JsonConvert.SerializeObject(myvm);
+			ViewBag.PageNum = 0;
+			var hotelsquery = hotelservice.GetAllFilteredPaginated(PerPage: 10,
+				pagenum: 0,
+				city: myvm.CountryOrCity,
+				country: myvm.CountryOrCity,
+				vm: myvm
+				).Where(h=>(h.Ameneties.Amenities&model.Amenities)==model.Amenities)
+                .OrderBy(h=> model.Sorting==HotelsortBy.StarsRating? h.starRating:
+				model.Sorting == HotelsortBy.ReviewsRating ? (h.Reviewed.Sum(r=>r.Rating)/ h.Reviewed.Count()) :
+				h.id);
+            ViewBag.Sorting = model.Sorting;
+            ViewBag.Amenities = model.Amenities;
+			return View(nameof(ViewHotels),hotelsquery);
+		}
+
+		public IActionResult GoToHotel(int id,RoomFilterationViewModel vm=null,bool checkfilteration=false)
         {
                 
 			SearchViewModel myvm = JsonConvert.DeserializeObject<SearchViewModel>(TempData["myviewmodel"].ToString());
