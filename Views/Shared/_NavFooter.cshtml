@@ -39,11 +39,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="~/css/Home.css" rel="stylesheet">
 
-
+   
     <style>
 
 
-
+        /*    .navbar {
+                            background-color: transparent !important;
+                            position: absolute;
+                            width: 100%;
+                            z-index: 10;
+                        } */
 
 
         .navbar .navbar-brand {
@@ -71,7 +76,7 @@
             -moz-appearance: none;
         }
     </style>
-
+    @RenderSection("Styles", required: false)
 </head>
 
 <body>
@@ -83,7 +88,7 @@
         var profilePicture = user?.ProfilePicture ?? "Default.jpg"; // Fallback image
     }
 
-    <nav class=" navbar navbar-expand-lg ">
+    <nav class=" navbar @* navbar-expand-lg *@ ">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="~/ProductsImages/air-booking-ticket-tickets-tourism-transportation-svgrepo-com.svg"
@@ -281,7 +286,7 @@
     <script src="~/js/jquery.waypoints.min.js"></script>
     <script src="~/js/jquery.fancybox.min.js"></script>
 
-    <!--script src="~/js/aos.js"></!script-->
+    @* <script src="~/js/aos.js"></script> *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
 
@@ -353,10 +358,9 @@
                 const lat = event.latLng.lat();
                 const lng = event.latLng.lng();
 
-                marker.setPosition(event.latLng);
-                document.getElementById('latitude').value = lat;
-                document.getElementById('longitude').value = lng;
-            });
+    @* 
+	<script src="~/js/jquery-3.4.1.min.js"></script>
+	<script src="~/js/bootstrap.min.js"></script> *@
 
             // When the user drags the marker, update the input fields
             google.maps.event.addListener(marker, 'dragend', function () {
@@ -367,14 +371,9 @@
             });
         }
 
-        function submitCoordinates() {
-            const lat = document.getElementById('latitude').value;
-            const lng = document.getElementById('longitude').value;
+    <script src="~/js/custom.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
 
-            if (!lat || !lng) {
-                alert('Please select a location on the map!');
-                return;
-            }
 
             // Send the selected coordinates to your C# backend (AJAX or Fetch)
             fetch('/api/coordinates/submit', {

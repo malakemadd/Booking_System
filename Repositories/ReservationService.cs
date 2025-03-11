@@ -135,7 +135,12 @@ namespace MVCBookingFinal_YARAB_.Repositories
 		}
 		public DraftReservation getUserReservation(string userid)
 		{
-			var hhh=context.DraftReservations.Include(r => r.Reserved).ThenInclude(R => R.Reserved).ThenInclude(R => R.Hotel).ThenInclude(H => H.Ameneties).Include(r=>r.UsedPromoCode).FirstOrDefault(d => d.UserId == userid);
+			var hhh=context.DraftReservations.Include(r => r.Reserved).ThenInclude(R => R.Reserved).ThenInclude(R => R.Hotel).ThenInclude(H => H.Ameneties).Include(r=>r.UsedPromoCode)
+				.Include(r=>r.Reserved).ThenInclude(R=>R.Reserved).ThenInclude(r=>r.Reserved).ThenInclude(r=>r.Reservation).ThenInclude(R=>R.mealPlan)
+				.Include(r=>r.Reserved).ThenInclude(R=>R.Reserved).ThenInclude(r=>r.Reserved).ThenInclude(r=>r.Reservation).ThenInclude(R => R.amenity)
+				//.Include(r=>r.Reserved).ThenInclude(R=>R.Reserved).ThenInclude(r=>r.Reserved).ThenInclude(r=>r.Reservation).ThenInclude(R => R.)
+				//.Include(r=>r.Reserved).ThenInclude(R=>R.Reserved).ThenInclude(r=>r.Reserved).ThenInclude(r=>r.Reservation)
+				.FirstOrDefault(d => d.UserId == userid);
 			return hhh;
 		
 		}

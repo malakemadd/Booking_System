@@ -93,7 +93,7 @@ namespace MVCBookingFinal_YARAB_.Repositories
 			var query = _context.Rooms
 				.Include(h => h.Hotel)
 				.ThenInclude(h => h.Reviewed)
-
+				.ThenInclude(r => r.User)
 				.Include(r => r.Reserved)
 				.ThenInclude(R => R.User)
 				.Include(r => r.Reserved)

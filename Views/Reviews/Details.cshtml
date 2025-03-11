@@ -4,51 +4,77 @@
     ViewData["Title"] = "Review Details";
 }
 
-<div class="container mt-4">
-    <div class="card shadow-lg">
-        <div class="card-header text-white text-center" style="background-color:#1A374D">
-            <h3>Review Details</h3>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered text-center">
-                    <thead class="table">
-                        <tr>
-                            <th>Field</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="fw-bold">Hotel</td>
-                            <td>@ViewBag.Hotel</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Address</td>
-                            <td>@Html.DisplayFor(model => model.Hotel.Address)</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">User</td>
-                            <td>@Html.DisplayFor(model => model.User.UserName)</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Rating</td>
-                            <td>@Html.DisplayFor(model => model.Rating)</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Description</td>
-                            <td>@Html.DisplayFor(model => model.Description)</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Review Date</td>
-                            <td>@Html.DisplayFor(model => model.ReviewDate)</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center mt-4">
-                <a asp-action="Index" class="btn btn-secondary px-4">Back to List</a>
-            </div>
+<div class="container mt-5">
+    <h1 class="text-center mt-4">Review Details</h1>
+    <hr />
+    <div class="card-body" style="width:800px; margin: 0 auto;">
+        <table class="table table-striped table-hover table-rounded overflow-auto">
+            <thead class="custom-row">
+                <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.Hotel)</td>
+                    <td>@Html.DisplayFor(model => model.Hotel.Address)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.User.UserName)</td>
+                    <td>@Html.DisplayFor(model => model.User.UserName)</td>
+                </tr>
+                <tr>
+                    <td >@Html.DisplayNameFor(model => model.Rating)</td>
+                    <td>@Html.DisplayFor(model => model.Rating)</td>
+                </tr>
+                <tr>
+                    <td >@Html.DisplayNameFor(model => model.Description)</td>
+                    <td class="text-wrap" style="max-width: 500px; word-wrap: break-word;">@Html.DisplayFor(model => model.Description)</td>
+                </tr>
+                <tr>
+                    <td >@Html.DisplayNameFor(model => model.ReviewDate)</td>
+                    <td>@Html.DisplayFor(model => model.ReviewDate)</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
         </div>
     </div>
 </div>
+
+<style>
+    table {
+        background-color: white;
+    }
+
+    .table-rounded {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .table-rounded th:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        .table-rounded th:last-child {
+            border-top-right-radius: 10px;
+        }
+
+    .custom-row th {
+        text-align: left;
+        background-color: #1a374d;
+        color: white;
+        font-weight: bold;
+    }
+
+    td {
+        text-align: left;
+    }
+
+    .container {
+        max-width: 92%;
+    }
+</style>
