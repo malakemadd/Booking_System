@@ -75,7 +75,7 @@ namespace MVCBookingFinal_YARAB_.Repositories
 				yield break;
 			}
 
-			for (int i = 0; i <= rooms.Count - roomsnum; i++)
+			for (int i = start; i <= rooms.Count - roomsnum; i++)
 			{
 				foreach (var combo in GetCombinations(rooms, roomsnum - 1, i + 1, counter))
 				{

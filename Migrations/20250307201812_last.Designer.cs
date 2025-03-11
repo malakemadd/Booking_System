@@ -4,6 +4,7 @@ using MVCBookingFinal_YARAB_.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCBookingFinal_YARAB_.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250307201812_last")]
+    partial class last
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace MVCBookingFinal_YARAB_.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DraftReservationRoom", b =>
+                {
+                    b.Property<int>("DraftReservationsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReservedId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DraftReservationsId", "ReservedId");
+
+                    b.HasIndex("ReservedId");
+
+                    b.ToTable("DraftReservationRoom");
+                });
 
             modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.Amenity", b =>
                 {
@@ -131,7 +149,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7620c9eb-158f-4338-a8af-e6c52626f403",
+                            ConcurrencyStamp = "c0755c82-43c0-421e-93ee-8a314568014c",
                             CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@example.com",
@@ -265,33 +283,10 @@ namespace MVCBookingFinal_YARAB_.Migrations
                         new
                         {
                             Id = 1,
-                            CheckInDate = new DateTime(2025, 3, 8, 2, 28, 31, 443, DateTimeKind.Local).AddTicks(2125),
-                            CheckOutDate = new DateTime(2025, 3, 13, 2, 28, 31, 443, DateTimeKind.Local).AddTicks(2133),
+                            CheckInDate = new DateTime(2025, 3, 7, 22, 18, 11, 175, DateTimeKind.Local).AddTicks(4274),
+                            CheckOutDate = new DateTime(2025, 3, 12, 22, 18, 11, 175, DateTimeKind.Local).AddTicks(4289),
                             UserId = "1"
                         });
-                });
-
-            modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.DraftReservationRoom", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int>("DraftReservationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReservedId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("DraftReservationId");
-
-                    b.HasIndex("ReservedId");
-
-                    b.ToTable("DraftReservationRoom");
                 });
 
             modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.Favorite", b =>
@@ -545,7 +540,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                         new
                         {
                             Id = 1,
-                            PaymentDate = new DateTime(2025, 3, 8, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(861),
+                            PaymentDate = new DateTime(2025, 3, 7, 22, 18, 11, 176, DateTimeKind.Local).AddTicks(4778),
                             PaymentMethodId = 25,
                             TransactionId = "sadiaosd",
                             status = "Confirmed"
@@ -617,7 +612,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                             AddingUserID = "1",
                             Code = "ANMMM",
                             Discount = 20.0,
-                            ExpiryDate = new DateTime(2025, 3, 13, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(2605),
+                            ExpiryDate = new DateTime(2025, 3, 12, 22, 18, 11, 176, DateTimeKind.Local).AddTicks(6823),
                             IsActive = true
                         });
                 });
@@ -662,7 +657,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                             Id = 1,
                             Complaint = "bad food",
                             HotelId = 1,
-                            ReviewDate = new DateTime(2025, 3, 8, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(4338),
+                            ReviewDate = new DateTime(2025, 3, 7, 22, 18, 11, 176, DateTimeKind.Local).AddTicks(8855),
                             UserId = "1",
                             isDeleted = false
                         });
@@ -709,8 +704,8 @@ namespace MVCBookingFinal_YARAB_.Migrations
                         {
                             Id = 1,
                             AmenityId = 1,
-                            CheckInDate = new DateTime(2025, 3, 8, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(6213),
-                            CheckOutDate = new DateTime(2025, 3, 13, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(6217),
+                            CheckInDate = new DateTime(2025, 3, 7, 22, 18, 11, 177, DateTimeKind.Local).AddTicks(1358),
+                            CheckOutDate = new DateTime(2025, 3, 12, 22, 18, 11, 177, DateTimeKind.Local).AddTicks(1363),
                             mealPlanId = 1,
                             reservationStatus = 1
                         });
@@ -804,7 +799,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                             Description = "thank you for the hotel",
                             HotelId = 1,
                             Rating = 5,
-                            ReviewDate = new DateTime(2025, 3, 8, 2, 28, 31, 444, DateTimeKind.Local).AddTicks(9776),
+                            ReviewDate = new DateTime(2025, 3, 7, 22, 18, 11, 177, DateTimeKind.Local).AddTicks(5692),
                             UserId = "1",
                             isDeleted = false
                         });
@@ -1149,7 +1144,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
                             PaymentType = 1,
                             CVV = "332",
                             CardNumber = "5151515",
-                            ExpiryDate = new DateOnly(2028, 3, 8)
+                            ExpiryDate = new DateOnly(2028, 3, 7)
                         });
                 });
 
@@ -1172,6 +1167,21 @@ namespace MVCBookingFinal_YARAB_.Migrations
                         });
                 });
 
+            modelBuilder.Entity("DraftReservationRoom", b =>
+                {
+                    b.HasOne("MVCBookingFinal_YARAB_.Models.DraftReservation", null)
+                        .WithMany()
+                        .HasForeignKey("DraftReservationsId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("MVCBookingFinal_YARAB_.Models.Room", null)
+                        .WithMany()
+                        .HasForeignKey("ReservedId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.City", b =>
                 {
                     b.HasOne("MVCBookingFinal_YARAB_.Models.Country", "Country")
@@ -1185,7 +1195,7 @@ namespace MVCBookingFinal_YARAB_.Migrations
 
             modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.DraftReservation", b =>
                 {
-                    b.HasOne("MVCBookingFinal_YARAB_.Models.PromoCode", "UsedPromoCode")
+                    b.HasOne("MVCBookingFinal_YARAB_.Models.UsedPromoCodes", "UsedPromoCode")
                         .WithMany()
                         .HasForeignKey("UsedPromoCodeId")
                         .OnDelete(DeleteBehavior.NoAction);
@@ -1199,25 +1209,6 @@ namespace MVCBookingFinal_YARAB_.Migrations
                     b.Navigation("UsedPromoCode");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.DraftReservationRoom", b =>
-                {
-                    b.HasOne("MVCBookingFinal_YARAB_.Models.DraftReservation", "DraftReservation")
-                        .WithMany("Reserved")
-                        .HasForeignKey("DraftReservationId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("MVCBookingFinal_YARAB_.Models.Room", "Reserved")
-                        .WithMany("DraftReservations")
-                        .HasForeignKey("ReservedId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("DraftReservation");
-
-                    b.Navigation("Reserved");
                 });
 
             modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.Favorite", b =>
@@ -1524,11 +1515,6 @@ namespace MVCBookingFinal_YARAB_.Migrations
                     b.Navigation("Cities");
                 });
 
-            modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.DraftReservation", b =>
-                {
-                    b.Navigation("Reserved");
-                });
-
             modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.Hotel", b =>
                 {
                     b.Navigation("Favorites");
@@ -1570,8 +1556,6 @@ namespace MVCBookingFinal_YARAB_.Migrations
 
             modelBuilder.Entity("MVCBookingFinal_YARAB_.Models.Room", b =>
                 {
-                    b.Navigation("DraftReservations");
-
                     b.Navigation("Images");
 
                     b.Navigation("Reserved");

@@ -32,6 +32,9 @@ namespace MVCBookingFinal_YARAB_.Models
 		public RoomStatus Status;
 		public List<RoomImage> Images { set; get; }
 
+		public List<DraftReservationRoom> DraftReservations { get; set; } = new();
+
+
 	}
 	public enum RoomStatus
 	{
