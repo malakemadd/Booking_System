@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="~/css/Home.css" rel="stylesheet">
 
-   
+
     <style>
 
 
@@ -53,30 +53,24 @@
             align-items: center;
         }
 
-    <link rel="stylesheet" href="~/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="~/css/jquery.fancybox.min.css">
-    <link rel="stylesheet" href="~/fonts/icomoon/style.css">
-    <link rel="stylesheet" href="~/fonts/flaticon/font/flaticon.css">
+        .navbar-brand img {
+            height: 50px; /* Adjust if needed */
+            width: 50px; /* Adjust if needed */
+            object-fit: cover;
+        }
 
-
-            position: absolute;
-            width: 100%;
-            z-index: 10;
-            top: 0;
-            left: 0;
-            padding-top: 0;
-            padding-bottom: 0;
+        .navbar-brand span {
+            font-weight: bold;
+            color: #1A374D; /* Your provided hex color */
         }
 
 
         #Users-types {
-    @RenderSection("Styles", required: false)
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
     </style>
-    <link href="~/css/Home.css" rel="stylesheet">
-    
 
 </head>
 
@@ -146,7 +140,6 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
                                     <li><a class="dropdown-item" href="@Url.Action("GiveRole", "Account")">Roles</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Hotel")">Hotels</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "City")">Cities</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Countries")">Countries</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Favorites")">Favorites</a></li>
