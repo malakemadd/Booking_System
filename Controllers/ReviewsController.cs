@@ -35,7 +35,7 @@ namespace MVCBookingFinal_YARAB_.Controllers
 
             //    return View(userReviews);
 
-                 return View(allReviews);
+                 //return View(allReviews);
             
         }
         [Authorize]
